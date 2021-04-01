@@ -39,6 +39,8 @@ class ComboController extends Controller
      */
     public function addCombo()
     {
+
+
         $data = [
             'combo_id'      => 'TJXM00002',
             'combo_name'    => '老年人体检套餐尊贵版（女）',
@@ -110,6 +112,43 @@ class ComboController extends Controller
             echo DB::table("combo")->insertGetId($data);
             echo '</br>';
         }
+    }
+
+    public function test()
+    {
+
+
+        $data = [
+            "combo_id"      => $this->generateComboId(),
+            "combo_name"    => $_POST["combo_name"],
+            "price"         => $_POST["price0"],
+            "price_now"     => $_POST["price_now"],
+            "add_time"      => time()
+        ];
+
+        $id = DB::table("combo")->insertGetId($data);
+        if($id){
+            // TODO 添加成功
+        }else{
+            // TODO 添加失败
+        }
+
+        $response = [
+            "errno" => 0,
+            "msg"   => "ok",
+            "id"    => $id
+        ];
+
+        return $response;
+    }
+
+
+    /**
+     * 生成 套餐ID
+     */
+    private function generateComboId()
+    {
+        return "TJ-". Str::random(8);
     }
 
 

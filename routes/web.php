@@ -17,6 +17,7 @@ Route::get('/', function () {
 
 
 Route::get('/hello',"ComboController@hello");
+Route::post('/test',"ComboController@test");
 Route::get('/combo/list',"ComboController@comboList");      //套餐列表
 Route::get('/combo/add',"ComboController@addCombo");      //添加套餐
 Route::get('/combo/edit',"ComboController@editCombo");      //编辑套餐
