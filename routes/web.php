@@ -14,3 +14,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/hello',"ComboController@hello");
+Route::get('/addCombo',"ComboController@addCombo");//添加套餐
+Route::get('/combo/fill',"ComboController@fillData");//填充数据
+Route::post('/test',"ComboController@test");//测试
+Route::get('/combo/delete',"ComboController@deleteCombo");//删除套餐
+Route::get('/combo/edit',"ComboController@editCombo");//编辑套餐
+Route::get('/combo/list',"ComboController@comboList");//查询
