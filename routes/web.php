@@ -15,6 +15,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//机构指标
+Route::get('/orga/orgaList',"OrgaindexController@orgaList");     //机构指标列表
+Route::get('/orga/addOrga',"OrgaindexController@addOrga");     //机构指标添加
+Route::get('/orga/updFindOrga',"OrgaindexController@updFindOrga");     //机构指标修改查询
+Route::get('/orga/editOrga',"OrgaindexController@editOrga");     //机构指标修改
+Route::get('/orga/delOrga',"OrgaindexController@delOrga");     //机构指标删除
+Route::get('/orga/findOrga',"OrgaindexController@findOrga");     //机构指标查询
+Route::get('/orga/generateOrgaId',"OrgaindexController@generateOrgaId");     //生成机构指标ID
+Route::get('/orga/orgaFill',"OrgaindexController@orgaFill");    //填充机构指标数据
 
 Route::get('/hello',"ComboController@hello");
 Route::post('/test',"ComboController@test");
