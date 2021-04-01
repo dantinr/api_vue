@@ -205,7 +205,7 @@ class ComboController extends Controller
         }else{
             $data = [
                 'errno' => 1,
-                'msg'   => '查询失败',
+                'msg'   => '无数据',
         }
         return json_encode($data);
         
