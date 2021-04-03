@@ -41,3 +41,8 @@ Route::get('/combo/edit',"ComboController@editCombo");      //编辑套餐
 Route::get('/combo/delete',"ComboController@deleteCombo");      //删除套餐
 Route::get('/combo/fill',"ComboController@fillData");      //填充数据
 
+
+
+// 预约信息查询
+Route::get('/book/list',"BookController@bookList");      //查询数据
+Route::get('/book/edit',"BookController@editBook");      //编辑套餐
