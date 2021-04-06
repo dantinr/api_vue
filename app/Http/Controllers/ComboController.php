@@ -133,7 +133,7 @@ class ComboController extends Controller
     public function deleteCombo()
     {
         $id = $_GET['combo_id'];
-        $res = DB::table("combo")->where(['combo_id'=>$id])->delete();
+        $res = DB::table("combo")->where(['combo_id'=>$id])->update('is_delete'=>1);
         if($res){
           // TODO 删除成功
           $response = [
