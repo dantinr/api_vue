@@ -37,7 +37,7 @@ class OrgaindexController extends Controller
     public function addOrga(Request $request){
         $orgaData = $request->post();
         $now = time();
-        $orgaData['id'] = $this->generateOrgaId();
+        $orgaData['orga_id'] = $this->generateOrgaId();
         $orgaData['orga_add_time'] = $now;
 
         $id = DB::table('orga_index')->insertGetId($orgaData);
