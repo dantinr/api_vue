@@ -85,6 +85,11 @@ class ComboController extends Controller
     public function addCombo()
     {
 
+        //如果前端post的是 json字符串 就用 file_get_contents("php://input") 然后解码json json_decode
+
+        //如果前端post的是 form-data 就用 $_POST接收
+
+
         $add_time = time();
         $data = [
             "combo_id"      => $this->generateComboId(),
@@ -127,8 +132,8 @@ class ComboController extends Controller
      //删除
     public function deleteCombo()
     {
-        $id = $_POST['id'];
-        $res = DB::table("combo")->where(['id'=>$id])->delete();
+        $id = $_GET['combo_id'];
+        $res = DB::table("combo")->where(['combo_id'=>$id])->delete();
         if($res){
           // TODO 删除成功
           $response = [
@@ -188,11 +193,12 @@ class ComboController extends Controller
               return $response;
     }
 
-    //查询数据
-    public function comboList()
+    //查询搜索数据
+    public function combosearch()
     {
-        $id = $_POST['id'];
-        $list = DB::table("combo")->find($id)->toArray();
+        $id = $_GET['combo_id'];
+        $list = DB::table("combo")->where(['combo_id'=>$id])->get()->toArray();
+        // var_dump($list);
         if($list){
             $data = [
             'errno' => 0,
@@ -205,10 +211,35 @@ class ComboController extends Controller
         }else{
             $data = [
                 'errno' => 1,
-                'msg'   => '无数据',
+                'msg'   => '无数据'
+            ];
+        }
+        return json_encode($data);
+    }
+        
+    //查询列表数据
+    public function comboList(Request $request)
+    {
+        // $id = $_POST['id'];
+        $size = $request->get('size');
+        $list = DB::table("combo")->paginate($size);
+        if($list){
+            $data = [
+            'errno' => 0,
+            'msg'   => 'ok',
+            'data'  => [
+                    'list'  => $list
+                ]
+            ];
+            
+        }else{
+            $data = [
+                'errno' => 1,
+                'msg'   => '无数据'
+            ];
         }
         return json_encode($data);
         
     }
 
-}
+    }
