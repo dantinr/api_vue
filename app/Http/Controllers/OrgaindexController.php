@@ -11,9 +11,9 @@ class OrgaindexController extends Controller
     /*
      *  机构指标列表
      * */
-    public function orgaList(){
-
-        $orgaList = DB::table('orga_index')->where(['is_delete'=>0])->limit(10)->get()->toArray();
+    public function orgaList(Request $request){
+        $size = $request->get("size");      //数据条数
+        $orgaList = DB::table('orga_index')->where(['is_delete'=>0])->paginate($size);
 
         if($orgaList){
             $orgaData = [
@@ -28,7 +28,7 @@ class OrgaindexController extends Controller
             ];
         }
 
-        return json_encode($orgaData);
+        echo json_encode($orgaData);
     }
 
     /*
@@ -70,15 +70,15 @@ class OrgaindexController extends Controller
             ];
         }
 
-        return json_encode($orgaInfo);
+        echo json_encode($orgaInfo);
     }
 
     /*
      *  机构指标查询
      * */
     public function findOrga(){
-        $orga_name = 'a';
-        $belongs_orga = 'F';
+        $orga_name = '白细胞';
+        $belongs_orga = '西祠';
         $is_match = 1;
 
         $orgaData = DB::table('orga_index')
@@ -100,7 +100,7 @@ class OrgaindexController extends Controller
             ];
         }
 
-        return json_encode($findData);
+        echo json_encode($findData);
     }
 
     /*
@@ -124,7 +124,7 @@ class OrgaindexController extends Controller
             ];
         }
 
-        return json_encode($updData);
+        echo json_encode($updData);
     }
 
     /*
@@ -162,7 +162,7 @@ class OrgaindexController extends Controller
             ];
         }
 
-        return json_encode($editData);
+        echo json_encode($editData);
 
     }
 
@@ -170,7 +170,7 @@ class OrgaindexController extends Controller
      *  机构指标删除
      * */
     public function delOrga(){
-        $id = 1;
+        $id = 19;
 
         $res = DB::table('orga_index')->where(['id'=>$id])->update(['is_delete'=>1]);
 
@@ -187,7 +187,7 @@ class OrgaindexController extends Controller
             ];
         }
 
-        return json_encode($delData);
+        echo json_encode($delData);
     }
 
     /*
