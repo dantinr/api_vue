@@ -55,7 +55,7 @@ class ComboController extends Controller
         }
     }
 
-    //测试 
+    //测试
     public function test()
     {
 
@@ -207,7 +207,7 @@ class ComboController extends Controller
                     'list'  => $list
                 ]
             ];
-            
+
         }else{
             $data = [
                 'errno' => 1,
@@ -239,7 +239,7 @@ class ComboController extends Controller
             ];
         }
         return json_encode($data);
-        
+
     }
 
     }
