@@ -133,7 +133,7 @@ class ComboController extends Controller
     public function deleteCombo()
     {
         $id = $_GET['combo_id'];
-        $res = DB::table("combo")->where(['combo_id'=>$id])->update('is_delete'=>1);
+        $res = DB::table("combo")->where(['combo_id'=>$id])->update(['is_delete'=>1]);
         if($res){
           // TODO 删除成功
           $response = [
@@ -216,7 +216,7 @@ class ComboController extends Controller
         }
         return json_encode($data);
     }
-        
+
     //查询列表数据
     public function comboList(Request $request)
     {
@@ -231,7 +231,7 @@ class ComboController extends Controller
                     'list'  => $list
                 ]
             ];
-            
+
         }else{
             $data = [
                 'errno' => 1,
