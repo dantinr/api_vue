@@ -40,3 +40,8 @@ Route::get('/item/edit',"ExamitemController@edititem");//修改
 Route::get('/item/deleteitem',"ExamitemController@deleteitem");//删除
 Route::get('/item/searchitem',"ExamitemController@searchitem");//搜索
 
+
+
+// 预约信息查询
+Route::get('/book/list',"BookController@bookList");      //查询数据
+Route::get('/book/edit',"BookController@editBook");      //编辑套餐
