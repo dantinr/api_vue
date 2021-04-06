@@ -25,6 +25,12 @@ Route::get('/combo/add',"ComboController@addCombo");      //添加套餐
 Route::get('/combo/edit',"ComboController@editCombo");      //编辑套餐
 Route::get('/combo/delete',"ComboController@deleteCombo");      //删除套餐
 Route::get('/combo/fill',"ComboController@fillData");      //填充数据
+Route::get('/combo/fill',"ComboController@fillData");//填充数据
+Route::get('/combo/delete',"ComboController@deleteCombo");//删除套餐
+Route::post('/combo/edit',"ComboController@editCombo");//编辑套餐
+Route::get('/combo/list',"ComboController@comboList");//查询列表数据
+Route::get('/combo/search',"ComboController@combosearch");//查询搜索
+Route::post('/addCombo',"ComboController@addCombo");//添加套餐
 
 
 
@@ -36,13 +42,7 @@ Route::get('/exam/edit',"ExamoragController@editExam");//编辑
 Route::get('/exam/delete',"ExamoragController@deleteExam");      //删除套餐
 Route::get('/exam/find',"ExamoragController@findExam");
 Route::get('/exam/fill',"ExamoragController@fillData");
-Route::post('/addCombo',"ComboController@addCombo");//添加套餐
-Route::get('/combo/fill',"ComboController@fillData");//填充数据
-Route::post('/test',"ComboController@test");//测试
-Route::get('/combo/delete',"ComboController@deleteCombo");//删除套餐
-Route::post('/combo/edit',"ComboController@editCombo");//编辑套餐
-Route::get('/combo/list',"ComboController@comboList");//查询列表数据
-Route::get('/combo/search',"ComboController@combosearch");//查询搜索
+
 
 
 //机构指标
