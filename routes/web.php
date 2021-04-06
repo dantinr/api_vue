@@ -47,3 +47,8 @@ Route::get('/item/searchitem',"ExamitemController@searchitem");//搜索
 // 预约信息查询
 Route::get('/book/list',"BookController@bookList");      //查询数据
 Route::get('/book/edit',"BookController@editBook");      //编辑套餐
+
+
+
+// Liwei测试
+Route::get('/liwei/test',"LiweiController@test");
