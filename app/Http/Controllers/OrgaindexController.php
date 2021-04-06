@@ -34,25 +34,11 @@ class OrgaindexController extends Controller
     /*
      *  机构指标添加
      * */
-    public function addOrga(){
-//        $data = $_POST;
+    public function addOrga(Request $request){
+        $orgaData = $request->post();
         $now = time();
-
-        $orgaData = [
-            'orga_id'          => $this->generateOrgaId(),
-            'orga_name'         => Str::random(8),
-            'is_comparison'     => 0,
-            'orga_unit'         => 'L',
-            'upper_limit'       => mt_rand(0,800),
-            'lower_limit'       => mt_rand(900,4000),
-            'normal_message'    => Str::random(10),
-            'high_message'      => Str::random(10),
-            'low_message'       => Str::random(10),
-            'belongs_orga'      => Str::random(6),
-            'exam_id'           => mt_rand(1,5),
-            'is_match'          => 1,
-            'orga_add_time'    => $now
-        ];
+        $orgaData['id'] = $this->generateOrgaId();
+        $orgaData['orga_add_time'] = $now;
 
         $id = DB::table('orga_index')->insertGetId($orgaData);
 
