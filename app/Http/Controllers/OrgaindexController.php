@@ -35,10 +35,14 @@ class OrgaindexController extends Controller
      *  机构指标添加
      * */
     public function addOrga(Request $request){
-        $orgaData = $request->post();
+//        print_r($_POST);die;
+//        $orgaData = $request->post();
+        $orgaData = json_decode(file_get_contents('php://input'),true);
+//        print_r($orgaData);die;
         $now = time();
         $orgaData['orga_id'] = $this->generateOrgaId();
         $orgaData['orga_add_time'] = $now;
+//        dd($orgaData);
 
         $id = DB::table('orga_index')->insertGetId($orgaData);
 
