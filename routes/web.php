@@ -15,7 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
 //用户接口
 Route::any('/user/login',"UserController@login");     //用户登录
 Route::get('/hello',"ComboController@hello");
@@ -82,3 +81,21 @@ Route::get('/exam/edit',"ExamoragController@editExam");//编辑
 Route::get('/exam/delete',"ExamoragController@deleteExam");      //删除套餐
 Route::get('/exam/find',"ExamoragController@findExam");
 Route::get('/exam/fill',"ExamoragController@fillData");
+
+//Route::get('/hello',"ComboController@hello");
+//Route::post('/test',"ComboController@test");
+//Route::get('/combo/list',"ComboController@comboList");      //套餐列表
+//Route::get('/combo/add',"ComboController@addCombo");      //添加套餐
+//Route::get('/combo/edit',"ComboController@editCombo");      //编辑套餐
+//Route::get('/combo/delete',"ComboController@deleteCombo");      //删除套餐
+//Route::get('/combo/fill',"ComboController@fillData");      //填充数据
+
+//标准指标管理
+Route::get('/hello',"ExamindexController@hello");
+Route::post('/test',"ExamindexController@test");
+Route::get('/exam/list',"ExamindexController@comboList");      //套餐列表
+Route::get('/exam/add',"ExamindexController@addCombo");      //添加套餐
+Route::get('/exam/edit',"ExamindexController@editCombo");      //编辑套餐
+Route::get('/exam/delete',"ExamindexController@deleteCombo");      //删除套餐
+Route::get('/exam/fill',"ExamindexController@fillData");
+
