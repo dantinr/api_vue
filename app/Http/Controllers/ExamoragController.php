@@ -44,22 +44,23 @@ class ExamoragController extends Controller
      */
     public function addExam()
     {
+        $examData = json_decode(file_get_contents('php://input'),true);
         $data = [
             'exam_id' => $this->generateExamId(),
-            'exam_name' => '试试看',
-            'exam_branch' => '520分店',
-            'exam_city' => '邯郸市',
-            'exam_genre' => '专业体检机构2',
-            'exam_tel' => '12312312315',
-            'exam_start' => '0',
+            'exam_name' => $_POST['exam_name'],
+            'exam_branch' => $_POST['exam_branch'],
+            'exam_city' => $_POST['exam_city'],
+            'exam_genre' => $_POST['exam_genre'],
+            'exam_tel' => $_POST['exam_tel'],
+            'exam_start' => $_POST['exam_start'],
             'exam_img'  => 'https://img0.baidu.com/it/u=2151136234,3513236673&fm=26&fmt=auto&gp=0.jpg',
-            'exam_property' => '1',
-            'exam_coord1'  => '15',
-            'exam_coord2'  => '15',
+            'exam_property' => $_POST['exam_property'],
+            'exam_coord1'  => $_POST['exam_coord1'],
+            'exam_coord2'  => $_POST['exam_coord2'],
 
         ];
 
-        $id = DB::table('exam_orga')->insertGetId($data);
+        $id = DB::table('exam_orga')->insertGetId($examData);
         if($id){
             $examInfo = [
                 'errno'     => 0,
@@ -75,7 +76,6 @@ class ExamoragController extends Controller
         }
         return json_encode($examInfo);
     }
-
     /** 
      * 编辑
      */
@@ -83,17 +83,18 @@ class ExamoragController extends Controller
     {
         $id= 1;
         $data = [
-            
-            'exam_name' => '试试看',
-            'exam_branch' => '520分店',
-            'exam_city' => '邯郸市',
-            'exam_genre' => '专业体检机构2',
-            'exam_tel' => '12312312315',
-            'exam_start' => '0',
+            // 'exam_id' => $this->generateExamId(),
+            'exam_id' => $this->generateExamId(),
+            'exam_name' => $_POST['exam_name'],
+            'exam_branch' => $_POST['exam_branch'],
+            'exam_city' => $_POST['exam_city'],
+            'exam_genre' => $_POST['exam_genre'],
+            'exam_tel' => $_POST['exam_tel'],
+            'exam_start' => $_POST['exam_start'],
             'exam_img'  => 'https://img0.baidu.com/it/u=2151136234,3513236673&fm=26&fmt=auto&gp=0.jpg',
-            'exam_property' => '1',
-            'exam_coord1'  => '15',
-            'exam_coord2'  => '15',
+            'exam_property' => $_POST['exam_property'],
+            'exam_coord1'  => $_POST['exam_coord1'],
+            'exam_coord2'  => $_POST['exam_coord2'],
 
         ];
 
@@ -119,10 +120,23 @@ class ExamoragController extends Controller
      */
     public function deleteExam()
     {
-        $id = 1;
+        $id = $_GET['id'];
         $res = DB::table("exam_orga")->where(['id'=>$id])->delete();
-        var_dump($res);
-        echo "删除套餐";
+        if($res){
+            //TODO删除成功
+            $response = [
+                "errno" => 0,
+                "msg" => "删除成功",
+                "id" => $id
+            ];
+        }else{
+            $response = [
+                "errno" => 1,
+                "msg" => "删除失败",
+                "id" => $id
+            ];
+        }
+            return $response;
 
     }
 
@@ -172,6 +186,14 @@ class ExamoragController extends Controller
             "天津",
             "上海,广州",
             "深圳"
+        /**
+         * 
+         * @var mixed
+         */
+        /**
+         * 
+         * @var mixed
+         */
         ];
 
         $now = time();
@@ -231,8 +253,9 @@ class ExamoragController extends Controller
     {
         // return  Str::random(8);
         $examlength = DB::table('exam_orga')->count();
+        // print_r($examlength);die;
 
-        $examlength = $ $examlength + 1;
+        $examlength = $examlength + 1;
 
         if($examlength >= 1 && $examlength < 10){
             $examlength = "0000".$examlength;
