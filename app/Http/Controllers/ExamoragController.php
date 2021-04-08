@@ -217,34 +217,6 @@ class ExamoragController extends Controller
 
 
 
-    public function test()
-    {
-
-
-        $data = [
-            "exam_id"      => $this->generateExamId(),
-            "exam_name"    => $_POST["exam_name"],
-            "exam_branch"  => $_POST["exam_branch"],
-            "exam_city"     => $_POST["exam_city"],
-            "exam_tel"      => $_POST["exam_tel"]
-        ];
-
-        $id = DB::table("exam_orga")->insertGetId($data);
-        if($id){
-            // TODO 添加成功
-        }else{
-            // TODO 添加失败
-        }
-
-        $response = [
-            "errno" => 0,
-            "msg"   => "ok",
-            "id"    => $id
-        ];
-
-        return $response;
-    }
-
     /**
      * 生成 id
      */

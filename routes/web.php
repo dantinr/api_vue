@@ -32,18 +32,6 @@ Route::get('/combo/search',"ComboController@combosearch");//查询搜索
 Route::post('/addCombo',"ComboController@addCombo");//添加套餐
 
 
-
-//体检机构
-Route::post('/exam/test',"ExamoragController@test");
-Route::get('/exam/list',"ExamoragController@examList");//列表
-Route::get('/exam/add',"ExamoragController@addExam");//添加
-Route::get('/exam/edit',"ExamoragController@editExam");//编辑
-Route::get('/exam/delete',"ExamoragController@deleteExam");      //删除套餐
-Route::get('/exam/find',"ExamoragController@findExam");
-Route::get('/exam/fill',"ExamoragController@fillData");
-
-
-
 //机构指标
 Route::get('/orga/orgaList',"OrgaindexController@orgaList");     //机构指标列表
 Route::post('/orga/addOrga',"OrgaindexController@addOrga");     //机构指标添加
@@ -73,14 +61,14 @@ Route::get('/book/edit',"BookController@editBook");      //编辑套餐
 Route::get('/liwei/test',"LiweiController@test");
 
 //体检机构
-Route::get('/exam/hello',"ExamoragController@hello");
-Route::post('/exam/test',"ExamoragController@test");
-Route::get('/exam/list',"ExamoragController@examList");//列表
-Route::get('/exam/add',"ExamoragController@addExam");//添加
-Route::get('/exam/edit',"ExamoragController@editExam");//编辑
-Route::get('/exam/delete',"ExamoragController@deleteExam");      //删除套餐
-Route::get('/exam/find',"ExamoragController@findExam");
-Route::get('/exam/fill',"ExamoragController@fillData");
+Route::get('/examo/hello',"ExamoragController@hello");
+Route::post('/examo/test',"ExamoragController@test");
+Route::get('/examo/list',"ExamoragController@examList");//列表
+Route::get('/examo/add',"ExamoragController@addExam");//添加
+Route::get('/examo/edit',"ExamoragController@editExam");//编辑
+Route::get('/examo/delete',"ExamoragController@deleteExam");      //删除套餐
+Route::get('/examo/find',"ExamoragController@findExam");
+Route::get('/examo/fill',"ExamoragController@fillData");
 
 //Route::get('/hello',"ComboController@hello");
 //Route::post('/test',"ComboController@test");
