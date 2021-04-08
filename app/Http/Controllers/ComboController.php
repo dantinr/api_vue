@@ -147,27 +147,16 @@ class ComboController extends Controller
     //更新数据
     public function editCombo()
     {
-        $id = $_POST['id'];
+        $id = $_POST['combo_id'];
+        $data=json_decode(file_get_contents("php://input"),true);
         $add_time = time();
-        $data = [
-            "combo_name"    => $_POST["combo_name"],
-            "is_avaliable"  => $_POST["is_avaliable"],
-            "combo_label"   => $_POST["combo_label"],
-            "clos_time"     => $_POST["clos_time"],
-            "price"         => $_POST["price"],
-            "price_now"     => $_POST["price_now"],
-            "location"      => $_POST["location"],
-            "suit_orga"     => $_POST["suit_orga"],
-            "branch_orga"   => $_POST["branch_orga"],
-            "combo_present" => $_POST["combo_present"],
-            "combo_rule"    => $_POST["combo_rule"],
-            "combo_form"    => $_POST["combo_form"],
-            "is_delete"     => $_POST["is_delete"],
-            "sold_num"      => $_POST["sold_num"],
-            "add_time"      => $add_time
-        ];
+        // $data['combo_id'] = $this->generateComboId();
+        $data['add_time'] = $add_time;
+        $data['is_delete'] = 0;
+        $data['sold_num'] = 123;
+        $data['is_avaliable'] = 1;
 
-        $res = DB::table("combo")->where(['id'=>$id])->update($data);
+        $res = DB::table("combo")->where(['combo_id'=>$id])->update($data);
         if($res){
             // TODO 编辑成功
             $response = [
