@@ -13,7 +13,7 @@ class OrgaindexController extends Controller
      * */
     public function orgaList(Request $request){
         $size = $request->get("size");      //数据条数
-        $orgaList = DB::table('orga_index')->where(['is_delete'=>0])->paginate($size);
+        $orgaList = DB::table('orga_index')->where('is_delete',0)->paginate($size);
 
         if($orgaList){
             $orgaData = [
@@ -35,10 +35,14 @@ class OrgaindexController extends Controller
      *  机构指标添加
      * */
     public function addOrga(Request $request){
-        $orgaData = $request->post();
+//        print_r($_POST);die;
+//        $orgaData = $request->post();
+        $orgaData = json_decode(file_get_contents('php://input'),true);
+//        print_r($orgaData);die;
         $now = time();
-        $orgaData['id'] = $this->generateOrgaId();
+        $orgaData['orga_id'] = $this->generateOrgaId();
         $orgaData['orga_add_time'] = $now;
+//        dd($orgaData);
 
         $id = DB::table('orga_index')->insertGetId($orgaData);
 
@@ -156,7 +160,9 @@ class OrgaindexController extends Controller
      *  机构指标删除
      * */
     public function delOrga(){
-        $id = 19;
+
+        $id = json_decode(file_get_contents('php://input'),true);
+//        print_r($id);die;
 
         $res = DB::table('orga_index')->where(['id'=>$id])->update(['is_delete'=>1]);
 
