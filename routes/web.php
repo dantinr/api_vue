@@ -60,6 +60,7 @@ Route::get('/book/edit',"BookController@editBook");      //编辑套餐
 
 // Liwei测试
 Route::get('/liwei/test',"LiweiController@test");
+Route::post('/liwei/test2',"LiweiController@test2");
 
 //体检机构
 Route::get('/examo/hello',"ExamoragController@hello");
