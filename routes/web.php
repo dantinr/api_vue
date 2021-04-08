@@ -46,7 +46,7 @@ Route::get('/exam/fill',"ExamoragController@fillData");
 
 //机构指标
 Route::get('/orga/orgaList',"OrgaindexController@orgaList");     //机构指标列表
-Route::any('/orga/addOrga',"OrgaindexController@addOrga");     //机构指标添加
+Route::post('/orga/addOrga',"OrgaindexController@addOrga");     //机构指标添加
 Route::post('/orga/updFindOrga',"OrgaindexController@updFindOrga");     //机构指标修改查询
 Route::post('/orga/editOrga',"OrgaindexController@editOrga");     //机构指标修改
 Route::post('/orga/delOrga',"OrgaindexController@delOrga");     //机构指标删除

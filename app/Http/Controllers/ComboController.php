@@ -88,29 +88,20 @@ class ComboController extends Controller
         //如果前端post的是 json字符串 就用 file_get_contents("php://input") 然后解码json json_decode
 
         //如果前端post的是 form-data 就用 $_POST接收
-
-
         $add_time = time();
-        $data = [
-            "combo_id"      => $this->generateComboId(),
-            "combo_name"    => $_POST["combo_name"],
-            "is_avaliable"  => $_POST["is_avaliable"],
-            "combo_label"   => $_POST["combo_label"],
-            "clos_time"     => $_POST["clos_time"],
-            "price"         => $_POST["price"],
-            "price_now"     => $_POST["price_now"],
-            "location"      => $_POST["location"],
-            "suit_orga"     => $_POST["suit_orga"],
-            "branch_orga"   => $_POST["branch_orga"],
-            "combo_present" => $_POST["combo_present"],
-            "combo_rule"    => $_POST["combo_rule"],
-            "combo_form"    => $_POST["combo_form"],
-            "is_delete"     => $_POST["is_delete"],
-            "sold_num"      => $_POST["sold_num"],
-            "add_time"      => $add_time
-        ];
+        $data=json_decode(file_get_contents("php://input"),true);
+        //print_r($data);die;
+        $data['combo_id'] = $this->generateComboId();
+        $data['add_time'] = $add_time;
+        $data['is_delete'] = 0;
+        $data['sold_num'] = 123;
+        $data['is_avaliable'] = 1;
+        $data['lable'] = 1;
+        $data['branch_orga'] = 1;
+        //print_r($data);die;
 
         $id = DB::table("combo")->insertGetId($data);
+        echo $id;die;
         if($id){
             // TODO 添加成功
             $response = [
@@ -222,6 +213,8 @@ class ComboController extends Controller
     {
         // $id = $_POST['id'];
         $size = $request->get('size');
+        // $size = $_GET['pageMaxNumber'];
+        // dd($size);
         $list = DB::table("combo")->paginate($size);
         if($list){
             $data = [
