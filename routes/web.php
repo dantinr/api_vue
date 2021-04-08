@@ -42,17 +42,18 @@ Route::post('/orga/findOrga',"OrgaindexController@findOrga");     //机构指标
 Route::get('/orga/generateOrgaId',"OrgaindexController@generateOrgaId");     //生成机构指标ID
 Route::get('/orga/orgaFill',"OrgaindexController@orgaFill");    //填充机构指标数据
 //项目
-Route::get('/item/additem',"ExamitemController@additem");//添加
+Route::post('/item/additem',"ExamitemController@additem");//添加
 Route::get('/item/fill',"ExamitemController@fillData");
 Route::get('/item/list',"ExamitemController@itemList");//获取列表数据
-Route::get('/item/edit',"ExamitemController@edititem");//修改
+Route::post('/item/edit',"ExamitemController@edititem");//修改
 Route::get('/item/deleteitem',"ExamitemController@deleteitem");//删除
 Route::get('/item/searchitem',"ExamitemController@searchitem");//搜索
 
 
 
 // 预约信息查询
-Route::get('/book/list',"BookController@bookList");      //查询数据
+Route::get('/book/search',"BookController@bookSearch");  //查询数据
+Route::get('/book/page',"BookController@bookPage");      //分页
 Route::get('/book/edit',"BookController@editBook");      //编辑套餐
 
 
