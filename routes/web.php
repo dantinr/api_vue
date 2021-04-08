@@ -65,7 +65,8 @@ Route::get('/item/searchitem',"ExamitemController@searchitem");//搜索
 
 
 // 预约信息查询
-Route::get('/book/list',"BookController@bookList");      //查询数据
+Route::get('/book/search',"BookController@bookSearch");  //查询数据
+Route::get('/book/page',"BookController@bookPage");      //分页
 Route::get('/book/edit',"BookController@editBook");      //编辑套餐
 
 

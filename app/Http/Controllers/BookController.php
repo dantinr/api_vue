@@ -10,14 +10,14 @@ class BookController extends Controller
 {
 
     /**
-     * 列表
+     * 查询
      */
-    public function bookList()
+    public function bookSearch()
     {
         $data_table1 = [
             'book_status'  => '',//$_POST['book_status'],
             'user_name'  => '',//$_POST['user_name'],
-            'user_tel'   => '13333333333',//$_POST['user_tel'],
+            'user_tel'   => '16666666666',//$_POST['user_tel'],
             'book_num'   => '',//$_POST['book_num']
         ];
         if(isset($data_table1['book_status'])&&!empty($data_table1['book_status'])){
@@ -30,7 +30,6 @@ class BookController extends Controller
             $list = DB::table("book_info")->where('book_num',$data_table1['book_num'])->get()->toArray();
         }
         
-       
         $data = [
             'errno' => 0,
             'msg'   => 'ok',
@@ -42,15 +41,32 @@ class BookController extends Controller
     }
 
     /**
+     * 列表
+     * 分页
+     */
+    public function bookPage(Request $request){
+        $size = $request->get('size');
+        $list = DB::table('book_info')->paginate($size);
+
+        $data = [
+            'error' => 0,
+            'msg'   => 'ok',
+            'data'  => [
+                'list'  => $list
+            ]
+            ];
+        return json_encode($data,JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
      * 修改 状态
      */
     public function editBook()
     {
 
-        // var_dump($_POST)
-        $id = 2;
+        $idCard = $_POST['user_idcard'];
         $data = [
-            'book_status' => 2,
+            'book_status' => $_POST['book_status'],
             'book_time'   =>time()
         ];
 
@@ -59,7 +75,7 @@ class BookController extends Controller
         }else{
             unset($data['book_status']);
         }
-        $res = DB::table("book_info")->where(['id'=>$id])->update($data);
+        $res = DB::table("book_info")->where(['user_idcard'=>$idCard])->update($data);
 
         
         // var_dump($res);
