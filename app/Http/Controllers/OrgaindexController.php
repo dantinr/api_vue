@@ -77,29 +77,39 @@ class OrgaindexController extends Controller
 
         $orgaSerch_arr = json_decode(file_get_contents('php://input'),true);
 
-        $orgaData = $orgaModel
-            ->where(function($orgaModel) use($orgaSerch_arr){
-                foreach($orgaSerch_arr as $serch){
-                    switch ($serch['type']) {
-                        case '指标名称':
-                            $orgaModel -> where('orga_name', 'like', '%'.$serch['value'].'%');
-                            break;
-                        case '体检机构':
-                            $orgaModel -> where(['belongs_orga'=>$serch['value']]);
-                            break;
-                        case '指标映射状态':
-                            $orgaModel -> where(['is_match'=>$serch['value']]);
-                            break;
-                    }
-                }
-            })
-            ->get()->toArray();
+        if($orgaSerch_arr['serchName'] == null && $orgaSerch_arr['orgaInfo'] == null && $orgaSerch_arr['mappingStatus'] == null){
+            $orgaData = [];
+        }
+
+//        print_r($orgaSerch_arr);die
+        if($orgaSerch_arr['orgaInfo'] == null){
+            $orgaData = $orgaModel
+                ->where('orga_name','like','%'.$orgaSerch_arr['serchName'].'%')
+                ->where(['is_match'=>$orgaSerch_arr['mappingStatus']])
+                ->get()->toArray();
+        }elseif($orgaSerch_arr['mappingStatus'] == null){
+            $orgaData = $orgaModel
+                ->where('orga_name','like','%'.$orgaSerch_arr['serchName'].'%')
+                ->where(['belongs_orga'=>$orgaSerch_arr['orgaInfo']])
+                ->get()->toArray();
+        }elseif($orgaSerch_arr['orgaInfo'] == null && $orgaSerch_arr['mappingStatus'] == null){
+            $orgaData = $orgaModel
+                ->where('orga_name','like','%'.$orgaSerch_arr['serchName'].'%')
+                ->get()->toArray();
+        }else{
+            $orgaData = $orgaModel
+                ->where('orga_name','like','%'.$orgaSerch_arr['serchName'].'%')
+                ->where(['belongs_orga'=>$orgaSerch_arr['orgaInfo']])
+                ->where(['is_match'=>$orgaSerch_arr['mappingStatus']])
+                ->get()->toArray();
+        }
+
 
         if($orgaData){
             $findData = [
                 'errno'         => 0,
                 'msg'           => 'ok',
-                'orgaData'      => $orgaData
+                'serchOrgaData'      => $orgaData
             ];
         }else{
             $findData = [
@@ -203,7 +213,7 @@ class OrgaindexController extends Controller
                 'normal_message'    => Str::random(10),
                 'high_message'      => Str::random(10),
                 'low_message'       => Str::random(10),
-                'belongs_orga'      => Str::random(6),
+                'belongs_orga'      => mt_rand(1,6),
                 'exam_id'           => mt_rand(1,5),
                 'is_match'          => 0,
                 'orga_add_time'    => $now
