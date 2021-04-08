@@ -12,7 +12,9 @@ class OrgaindexController extends Controller
      *  机构指标列表
      * */
     public function orgaList(Request $request){
+
         $size = $request->get("size");      //数据条数
+
         $orgaList = DB::table('orga_index')->where('is_delete',0)->paginate($size);
 
         if($orgaList){
@@ -97,7 +99,8 @@ class OrgaindexController extends Controller
      *  机构指标修改查询
      * */
     public function updFindOrga(){
-        $id = 1;
+
+        $id = json_decode(file_get_contents('php://input'),true);
 
         $orgaData = DB::table('orga_index')->find($id);
 
@@ -122,23 +125,9 @@ class OrgaindexController extends Controller
      * */
     public function editOrga(){
 
-        $id = 1;
+        $orgaData = json_decode(file_get_contents('php://input'),true);
 
-        $orgaData = [
-            'orga_name'         => Str::random(8),
-            'is_comparison'     => 0,
-            'orga_unit'         => 'L',
-            'upper_limit'       => mt_rand(0,800),
-            'lower_limit'       => mt_rand(900,4000),
-            'normal_message'    => Str::random(10),
-            'high_message'      => Str::random(10),
-            'low_message'       => Str::random(10),
-            'belongs_orga'      => Str::random(6),
-            'exam_id'           => mt_rand(1,5),
-            'is_match'          => 1
-        ];
-
-        $res = DB::table('orga_index')->where(['id'=>$id])->update($orgaData);
+        $res = DB::table('orga_index')->where(['id'=>$orgaData['id']])->update($orgaData);
 
         if($res){
             $editData = [
