@@ -20,20 +20,21 @@ class ExamitemController extends Controller
     public function additem()
     {
         $now = time();
-
+        $d=json_decode(file_get_contents("php://input"),true);
         $data = [
             'item_id'      => 'TJXM'.Str::random(6),
-            'item_name'    =>$_POST['item_name'],
-            'is_avaliable'=>$_POST['is_avaliable'],
-            'label'=>$_POST['label'],
-            'price'         => $_POST['price'],
-            'price_now'     => $_POST['price_now'],
-            'location'      => $_POST['location'],
-            'organization'  => $_POST['organization'],
-            'embranchment'      => $_POST['embranchment'],
-            'scope'=>$_POST['scope'],
-            'significance'=>$_POST['significance'],
-            'attention'=>$_POST['attention'],
+            'item_name'    =>$d['item_name'],
+            'is_avaliable'=>$d['is_avaliable'],
+            'label'=>$d['label'],
+            'price'         => $d['price'],
+            'price_now'     => $d['price_now'],
+            'location'      => $d['location'],
+            'district'     =>$d['district'],
+            'organization'  => $d['organization'],
+            'embranchment'      => $d['embranchment'],
+            'scope'=>$d['scope'],
+            'significance'=>$d['significance'],
+            'attention'=>$d['attention'],
             'add_time'=>$now,
         ];
 
@@ -61,12 +62,11 @@ class ExamitemController extends Controller
     /**
      * 查询
      */
-    public function itemList()
+    public function itemList(Request $request)
     {
-//        $id = $_POST['id'];
-        //$row = DB::table("combo")->find($id);     //查询一条记录
-        $list = DB::table("exam_items")->limit(10)->get()->toArray();
-        //echo '<pre>';print_r($list);echo '</pre>';
+        //?page=2&size=10
+        $size = $request->get('size');
+        $list = DB::table("exam_items")->paginate($size);
 
         $data = [
             'errno' => 0,
@@ -84,9 +84,9 @@ class ExamitemController extends Controller
     public function searchitem(){
 
         $condition = [
-            "item_id"   => '123',
-            "location"  => '北',
-            "organization" => 2
+            "item_id"   => $_GET['item_id'],
+            "location"  => $_GET['location'],
+            "organization" => $_GET['organization']
         ];
 
         //按id查询
@@ -133,20 +133,22 @@ class ExamitemController extends Controller
      */
     public function edititem()
     {
-        $id = 4;
+        $d=json_decode(file_get_contents("php://input"),true);
+        $id = $d['id'];
         $data = [
             'item_id'      => 'TJXM'.Str::random(6),
-            'item_name'    =>'12131',
-            'is_avaliable'=>1,
-            'label'=>'adasad',
-            'price'         => 132,
-            'price_now'     => 12321,
-            'location'      => 'faddfgfdas',
-            'organization'  => 12,
-            'embranchment'      => 123,
-            'scope'=>'1312312',
-            'significance'=>'1231223',
-            'attention'=>'123123',
+            'item_name'    =>$d['item_name'],
+            'is_avaliable'=>$d['is_avaliable'],
+            'label'=>$d['label'],
+            'price'         => $d['price'],
+            'price_now'     => $d[ 'price_now'],
+            'location'      => $d['location'],
+            'district'     =>$d['district'],
+            'organization'  => $d['organization'],
+            'embranchment'      => $d['embranchment'],
+            'scope'=>$d['scope'],
+            'significance'=>$d['significance'],
+            'attention'=>$d['attention'],
 
         ];
 
@@ -171,9 +173,9 @@ class ExamitemController extends Controller
      */
     public function deleteitem()
     {
-        $id = 1;
+        $id = $_GET['id'];
 
-        $res = DB::table('exam_items')->where(['id' => $id])->update(['is_delete' => 3]);
+        $res = DB::table('exam_items')->where(['id' => $id])->update(['is_delete' => 1]);
 
         if ($res) {
             $delData = [
