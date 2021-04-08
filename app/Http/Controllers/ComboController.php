@@ -204,7 +204,7 @@ class ComboController extends Controller
         $size = $request->get('size');
         // $size = $_GET['pageMaxNumber'];
         // dd($size);
-        $list = DB::table("combo")->paginate($size);
+        $list = DB::table("combo")->where('is_delete',0)->paginate($size);
         if($list){
             $data = [
             'errno' => 0,
