@@ -11,14 +11,19 @@ class OrgaindexController extends Controller
     /*
      *  机构指标列表
      * */
-    public function orgaList(){
+    public function orgaList(Request $request){
 
-        $orgaList = DB::table('orga_index')->where(['is_delete'=>0])->limit(10)->get()->toArray();
+        $size = $request->get("size");      //数据条数
+
+        $orgaList = DB::table('orga_index')->where('is_delete',0)->paginate($size);
+        $total = DB::table('orga_index')->where('is_delete',0)->count();
+//        print_r($total);die;
 
         if($orgaList){
             $orgaData = [
                 'errno' => 0,
                 'msg'   => 'ok',
+                'total' => $total,
                 'data'  => $orgaList
             ];
         }else{
@@ -28,31 +33,21 @@ class OrgaindexController extends Controller
             ];
         }
 
-        return json_encode($orgaData);
+        echo json_encode($orgaData);
     }
 
     /*
      *  机构指标添加
      * */
-    public function addOrga(){
-//        $data = $_POST;
+    public function addOrga(Request $request){
+//        print_r($_POST);die;
+//        $orgaData = $request->post();
+        $orgaData = json_decode(file_get_contents('php://input'),true);
+//        print_r($orgaData);die;
         $now = time();
-
-        $orgaData = [
-            'orga_id'          => $this->generateOrgaId(),
-            'orga_name'         => Str::random(8),
-            'is_comparison'     => 0,
-            'orga_unit'         => 'L',
-            'upper_limit'       => mt_rand(0,800),
-            'lower_limit'       => mt_rand(900,4000),
-            'normal_message'    => Str::random(10),
-            'high_message'      => Str::random(10),
-            'low_message'       => Str::random(10),
-            'belongs_orga'      => Str::random(6),
-            'exam_id'           => mt_rand(1,5),
-            'is_match'          => 1,
-            'orga_add_time'    => $now
-        ];
+        $orgaData['orga_id'] = $this->generateOrgaId();
+        $orgaData['orga_add_time'] = $now;
+//        dd($orgaData);
 
         $id = DB::table('orga_index')->insertGetId($orgaData);
 
@@ -70,21 +65,34 @@ class OrgaindexController extends Controller
             ];
         }
 
-        return json_encode($orgaInfo);
+        echo json_encode($orgaInfo);
     }
 
     /*
      *  机构指标查询
      * */
     public function findOrga(){
-        $orga_name = 'a';
-        $belongs_orga = 'F';
-        $is_match = 1;
 
-        $orgaData = DB::table('orga_index')
-            ->where('orga_name','like','%'.$orga_name.'%')
-            ->orWhere('belongs_orga','like','%'.$belongs_orga.'%')
-            ->orWhere('is_match','==',$is_match)
+        $orgaModel = DB::table('orga_index');
+
+        $orgaSerch_arr = json_decode(file_get_contents('php://input'),true);
+
+        $orgaData = $orgaModel
+            ->where(function($orgaModel) use($orgaSerch_arr){
+                foreach($orgaSerch_arr as $serch){
+                    switch ($serch['type']) {
+                        case '指标名称':
+                            $orgaModel -> where('orga_name', 'like', '%'.$serch['value'].'%');
+                            break;
+                        case '体检机构':
+                            $orgaModel -> where(['belongs_orga'=>$serch['value']]);
+                            break;
+                        case '指标映射状态':
+                            $orgaModel -> where(['is_match'=>$serch['value']]);
+                            break;
+                    }
+                }
+            })
             ->get()->toArray();
 
         if($orgaData){
@@ -100,14 +108,15 @@ class OrgaindexController extends Controller
             ];
         }
 
-        return json_encode($findData);
+        echo json_encode($findData);
     }
 
     /*
      *  机构指标修改查询
      * */
     public function updFindOrga(){
-        $id = 1;
+
+        $id = json_decode(file_get_contents('php://input'),true);
 
         $orgaData = DB::table('orga_index')->find($id);
 
@@ -124,7 +133,7 @@ class OrgaindexController extends Controller
             ];
         }
 
-        return json_encode($updData);
+        echo json_encode($updData);
     }
 
     /*
@@ -132,23 +141,9 @@ class OrgaindexController extends Controller
      * */
     public function editOrga(){
 
-        $id = 1;
+        $orgaData = json_decode(file_get_contents('php://input'),true);
 
-        $orgaData = [
-            'orga_name'         => Str::random(8),
-            'is_comparison'     => 0,
-            'orga_unit'         => 'L',
-            'upper_limit'       => mt_rand(0,800),
-            'lower_limit'       => mt_rand(900,4000),
-            'normal_message'    => Str::random(10),
-            'high_message'      => Str::random(10),
-            'low_message'       => Str::random(10),
-            'belongs_orga'      => Str::random(6),
-            'exam_id'           => mt_rand(1,5),
-            'is_match'          => 1
-        ];
-
-        $res = DB::table('orga_index')->where(['id'=>$id])->update($orgaData);
+        $res = DB::table('orga_index')->where(['id'=>$orgaData['id']])->update($orgaData);
 
         if($res){
             $editData = [
@@ -162,7 +157,7 @@ class OrgaindexController extends Controller
             ];
         }
 
-        return json_encode($editData);
+        echo json_encode($editData);
 
     }
 
@@ -170,7 +165,9 @@ class OrgaindexController extends Controller
      *  机构指标删除
      * */
     public function delOrga(){
-        $id = 1;
+
+        $id = json_decode(file_get_contents('php://input'),true);
+//        print_r($id);die;
 
         $res = DB::table('orga_index')->where(['id'=>$id])->update(['is_delete'=>1]);
 
@@ -187,7 +184,7 @@ class OrgaindexController extends Controller
             ];
         }
 
-        return json_encode($delData);
+        echo json_encode($delData);
     }
 
     /*
