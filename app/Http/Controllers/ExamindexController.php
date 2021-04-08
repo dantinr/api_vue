@@ -35,6 +35,42 @@ class ExamindexController extends Controller
     }
 
     /**
+     * 搜索
+     */
+        public function inquire(){
+                $condition = [
+                    "exam_name"   => 'yOkjedKq',
+                    "exam_whether"  => 0,
+                ];
+                $exam_name = $condition['exam_name'];
+                $exam_whether = $condition['exam_whether'];
+                //按id查询
+                if(!empty($exam_name||$exam_name==0) && !empty($exam_whether||$exam_whether==0)){
+                    //判断第一个字符，如果是 英文就是 id  否则就是 项目名称
+                        $list = DB::table("exam_index")
+                            ->where('exam_whether','=',$exam_whether)
+                            ->Where('exam_name','like',"%$exam_name%")
+                            ->get()
+                            ->toArray();
+
+                }else if(!empty($exam_name) || !empty($exam_whether)){
+
+                    $list = DB::table("exam_index")
+                        ->where('exam_whether','=',$exam_whether)
+                        ->orWhere('exam_name','like',"%$exam_name%")
+                        ->get()
+                        ->toArray();
+                }else{
+
+                        $list = DB::table("exam_index")->get()->toArray();
+                    }
+                return $list;
+
+                }
+
+
+
+    /**
      * 添加套餐
      */
     public function addCombo()
@@ -63,12 +99,12 @@ class ExamindexController extends Controller
      */
     public function editCombo()
     {
-        $id = 2;
+        $id = 3 ;
         $data = [
             'price' => 180000
         ];
 
-        $res = DB::table("combo")->where(['id'=>$id])->update($data);
+        $res = DB::table("exam_index")->where(['id'=>$id])->update($data);
         var_dump($res);
         echo "更新套餐";
     }
@@ -78,10 +114,20 @@ class ExamindexController extends Controller
      */
     public function deleteCombo()
     {
-        $id = 1;
-        $res = DB::table("exam_index")->where(['id'=>$id])->delete();
-        var_dump($res);
-        echo "删除套餐";
+        $id = 3;
+        $res = DB::table("exam_index")->where(['id'=>$id])->update(['exam_delete'=>'1']);
+        if($res){
+          $delData=[
+              "errno" => 0,
+              "msg"   => "删除成功",
+              "$res"    => $res
+          ];
+        }
+
+
+
+        return $delData;
+
 
     }
 
