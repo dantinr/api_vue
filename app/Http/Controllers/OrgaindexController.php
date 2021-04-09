@@ -77,38 +77,42 @@ class OrgaindexController extends Controller
 
         $orgaSerch_arr = json_decode(file_get_contents('php://input'),true);
 
-        if($orgaSerch_arr['serchName'] == null && $orgaSerch_arr['orgaInfo'] == null && $orgaSerch_arr['mappingStatus'] == null){
+//        print_r($orgaSerch_arr);die;
+
+        if($orgaSerch_arr['serchForm']['serchName'] == null && $orgaSerch_arr['serchForm']['orgaInfo'] == null && $orgaSerch_arr['serchForm']['mappingStatus'] == null){
             $orgaData = [];
         }
 
 //        print_r($orgaSerch_arr);die
-        if($orgaSerch_arr['orgaInfo'] == null){
+        if($orgaSerch_arr['serchForm']['orgaInfo'] == null){
             $orgaData = $orgaModel
-                ->where('orga_name','like','%'.$orgaSerch_arr['serchName'].'%')
-                ->where(['is_match'=>$orgaSerch_arr['mappingStatus']])
-                ->get()->toArray();
-        }elseif($orgaSerch_arr['mappingStatus'] == null){
+                ->where('orga_name','like','%'.$orgaSerch_arr['serchForm']['serchName'].'%')
+                ->where(['is_match'=>$orgaSerch_arr['serchForm']['mappingStatus']])
+                ->where('is_delete',0)->paginate($orgaSerch_arr['pageData']['size']);
+        }elseif($orgaSerch_arr['serchForm']['mappingStatus'] == null){
             $orgaData = $orgaModel
-                ->where('orga_name','like','%'.$orgaSerch_arr['serchName'].'%')
-                ->where(['belongs_orga'=>$orgaSerch_arr['orgaInfo']])
-                ->get()->toArray();
-        }elseif($orgaSerch_arr['orgaInfo'] == null && $orgaSerch_arr['mappingStatus'] == null){
+                ->where('orga_name','like','%'.$orgaSerch_arr['serchForm']['serchName'].'%')
+                ->where(['belongs_orga'=>$orgaSerch_arr['serchForm']['orgaInfo']])
+                ->where('is_delete',0)->paginate($orgaSerch_arr['pageData']['size']);
+        }elseif($orgaSerch_arr['serchForm']['orgaInfo'] == null && $orgaSerch_arr['serchForm']['mappingStatus'] == null){
             $orgaData = $orgaModel
-                ->where('orga_name','like','%'.$orgaSerch_arr['serchName'].'%')
-                ->get()->toArray();
+                ->where('orga_name','like','%'.$orgaSerch_arr['serchForm']['serchName'].'%')
+                ->where('is_delete',0)->paginate($orgaSerch_arr['pageData']['size']);
         }else{
             $orgaData = $orgaModel
-                ->where('orga_name','like','%'.$orgaSerch_arr['serchName'].'%')
-                ->where(['belongs_orga'=>$orgaSerch_arr['orgaInfo']])
-                ->where(['is_match'=>$orgaSerch_arr['mappingStatus']])
-                ->get()->toArray();
+                ->where('orga_name','like','%'.$orgaSerch_arr['serchForm']['serchName'].'%')
+                ->where(['belongs_orga'=>$orgaSerch_arr['serchForm']['orgaInfo']])
+                ->where(['is_match'=>$orgaSerch_arr['serchForm']['mappingStatus']])
+                ->where('is_delete',0)->paginate($orgaSerch_arr['pageData']['size']);
         }
 
+        $total = count($orgaData);
 
         if($orgaData){
             $findData = [
                 'errno'         => 0,
                 'msg'           => 'ok',
+                'total'         => $total,
                 'serchOrgaData'      => $orgaData
             ];
         }else{
@@ -179,7 +183,7 @@ class OrgaindexController extends Controller
     * */
     public function orgaFill(){
         $now = time();
-        for($i=0;$i<20;$i++){
+        for($i=0;$i<200;$i++){
             $orgadata = [
                 'orga_id'          => $this->generateOrgaId(),
                 'orga_name'         => Str::random(8),
@@ -222,8 +226,5 @@ class OrgaindexController extends Controller
 
         return 'JGZB'.$orgalength;
     }
-
-
-
 
 }
