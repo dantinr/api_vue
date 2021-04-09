@@ -80,7 +80,7 @@ class OrgaindexController extends Controller
 //        print_r($orgaSerch_arr);die;
 
         if($orgaSerch_arr['serchForm']['serchName'] == null && $orgaSerch_arr['serchForm']['orgaInfo'] == null && $orgaSerch_arr['serchForm']['mappingStatus'] == null){
-            $orgaData = [];
+            $orgaList = DB::table('orga_index')->where('is_delete',0)->paginate($orgaSerch_arr['pageData']['size']);
         }
 
 //        print_r($orgaSerch_arr);die
