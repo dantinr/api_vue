@@ -122,31 +122,6 @@ class OrgaindexController extends Controller
     }
 
     /*
-     *  机构指标修改查询
-     * */
-    public function updFindOrga(){
-
-        $id = json_decode(file_get_contents('php://input'),true);
-
-        $orgaData = DB::table('orga_index')->find($id);
-
-        if($orgaData){
-            $updData = [
-                'errno'     => 0,
-                'msg'       => 'ok',
-                'orgaData'   => $orgaData
-            ];
-        }else{
-            $updData = [
-                'errno'     => 1,
-                'msg'       => 'false'
-            ];
-        }
-
-        echo json_encode($updData);
-    }
-
-    /*
      *  机构指标修改
      * */
     public function editOrga(){
@@ -178,8 +153,10 @@ class OrgaindexController extends Controller
 
         $id = json_decode(file_get_contents('php://input'),true);
 //        print_r($id);die;
+        foreach($id as $v){
+            $res = DB::table('orga_index')->where(['id'=>$v])->update(['is_delete'=>1]);
+        }
 
-        $res = DB::table('orga_index')->where(['id'=>$id])->update(['is_delete'=>1]);
 
         if($res){
             $delData = [
