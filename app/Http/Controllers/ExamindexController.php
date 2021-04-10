@@ -42,8 +42,8 @@ class ExamindexController extends Controller
      */
         public function inquire(Request $request){
                 $condition = [
-                    "exam_name"   => 'yOkjedKq',
-                    "exam_whether"  => 0,
+                    "exam_name"   => 'c',
+                    "exam_whether"  => 1,
                 ];
                 $exam_name = $condition['exam_name'];
                 $exam_whether = $condition['exam_whether'];
@@ -54,7 +54,7 @@ class ExamindexController extends Controller
                         $list = DB::table("exam_index")
                             ->where('exam_whether','=',$exam_whether)
                             ->Where('exam_name','like',"%$exam_name%")
-                            ->Where(['exam_delete'=>0])
+                            ->Where('exam_delete',0)
                             ->paginate($size);
 
 
