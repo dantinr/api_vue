@@ -83,9 +83,9 @@ Route::get('/examo/fill',"ExamoragController@fillData");
 Route::get('/hello',"ExamindexController@hello");
 Route::post('/test',"ExamindexController@test");
 Route::get('/exam/list',"ExamindexController@comboList");      //套餐列表
-Route::get('/exam/add',"ExamindexController@addCombo");      //添加套餐
-Route::get('/exam/edit',"ExamindexController@editCombo");      //编辑套餐
-Route::get('/exam/delete',"ExamindexController@deleteCombo");      //删除套餐
-Route::get('/exam/fill',"ExamindexController@fillData");
-Route::get('/exam/deleteCombo',"ExamindexController@deleteCombo");
-Route::get('/exam/inquire',"ExamindexController@inquire");
+Route::post('/exam/add',"ExamindexController@addCombo");      //添加套餐
+Route::post('/exam/edit',"ExamindexController@editCombo");      //编辑套餐
+Route::post('/exam/delete',"ExamindexController@deleteCombo");      //删除套餐
+Route::post('/exam/fill',"ExamindexController@fillData");
+Route::post('/exam/deleteCombo',"ExamindexController@deleteCombo");
+Route::post('/exam/inquire',"ExamindexController@inquire");
