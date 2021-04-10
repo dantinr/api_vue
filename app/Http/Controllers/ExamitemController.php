@@ -29,7 +29,7 @@ class ExamitemController extends Controller
             'price'         => $d['price'],
             'price_now'     => $d['price_now'],
             'location'      => $d['location'],
-            'district'     =>$d['district'],
+            'district'     =>explode(',',$d['district']),
             'organization'  => $d['organization'],
             'embranchment'      => $d['embranchment'],
             'scope'=>$d['scope'],
