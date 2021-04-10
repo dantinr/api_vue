@@ -66,7 +66,7 @@ class ExamitemController extends Controller
     {
         //?page=2&size=10
         $size = $request->get('size');
-        $list = DB::table("exam_items")->orderBy('id', 'desc') ->paginate($size);
+        $list = DB::table("exam_items")->where(['is_delete'=>0])->orderBy('id', 'desc') ->paginate($size);
 
         $data = [
             'errno' => 0,
