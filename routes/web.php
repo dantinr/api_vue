@@ -65,10 +65,10 @@ Route::post('/liwei/test2',"LiweiController@test2");
 Route::get('/examo/hello',"ExamoragController@hello");
 Route::post('/examo/test',"ExamoragController@test");
 Route::get('/examo/list',"ExamoragController@examList");//列表
-Route::get('/examo/add',"ExamoragController@addExam");//添加
-Route::get('/examo/edit',"ExamoragController@editExam");//编辑
-Route::get('/examo/delete',"ExamoragController@deleteExam");      //删除套餐
-Route::get('/examo/find',"ExamoragController@findExam");
+Route::post('/examo/add',"ExamoragController@addExam");//添加
+Route::post('/examo/edit',"ExamoragController@editExam");//编辑
+Route::post('/examo/delete',"ExamoragController@deleteExam");      //删除套餐
+Route::post('/examo/find',"ExamoragController@findExam");
 Route::get('/examo/fill',"ExamoragController@fillData");
 
 //Route::get('/hello',"ComboController@hello");
