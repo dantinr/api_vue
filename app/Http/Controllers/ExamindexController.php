@@ -17,12 +17,13 @@ class ExamindexController extends Controller
     /**
      * 获取套餐列表
      */
-    public function comboList()
+    public function comboList(Request $request)
     {
 
 //        $id = 1;
         //$row = DB::table("combo")->find($id);     //查询一条记录
-        $list = DB::table("exam_index")->limit(10)->paginate(10)->toArray();
+        $size = $request ->get('size');
+        $list = DB::table("exam_index")->orderBy('id','desc')->paginate($size);
         //echo '<pre>';print_r($list);echo '</pre>';
 
         $data = [
