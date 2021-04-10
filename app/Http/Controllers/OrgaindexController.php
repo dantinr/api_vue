@@ -12,13 +12,18 @@ class OrgaindexController extends Controller
      *  机构指标列表
      * */
     public function orgaList(Request $request){
+
         $size = $request->get("size");      //数据条数
+
         $orgaList = DB::table('orga_index')->where('is_delete',0)->paginate($size);
+        $total = DB::table('orga_index')->where('is_delete',0)->count();
+//        print_r($total);die;
 
         if($orgaList){
             $orgaData = [
                 'errno' => 0,
                 'msg'   => 'ok',
+                'total' => $total,
                 'data'  => $orgaList
             ];
         }else{
@@ -67,21 +72,48 @@ class OrgaindexController extends Controller
      *  机构指标查询
      * */
     public function findOrga(){
-        $orga_name = '白细胞';
-        $belongs_orga = '西祠';
-        $is_match = 1;
 
-        $orgaData = DB::table('orga_index')
-            ->where('orga_name','like','%'.$orga_name.'%')
-            ->orWhere('belongs_orga','like','%'.$belongs_orga.'%')
-            ->orWhere('is_match','==',$is_match)
-            ->get()->toArray();
+        $orgaModel = DB::table('orga_index');
+
+        $orgaSerch_arr = json_decode(file_get_contents('php://input'),true);
+
+//        print_r($orgaSerch_arr);die;
+
+        if($orgaSerch_arr['serchForm']['serchName'] == null && $orgaSerch_arr['serchForm']['orgaInfo'] == null && $orgaSerch_arr['serchForm']['mappingStatus'] == null){
+            $orgaList = DB::table('orga_index')->where('is_delete',0)->paginate($orgaSerch_arr['pageData']['size']);
+        }
+
+//        print_r($orgaSerch_arr);die
+        if($orgaSerch_arr['serchForm']['orgaInfo'] == null){
+            $orgaData = $orgaModel
+                ->where('orga_name','like','%'.$orgaSerch_arr['serchForm']['serchName'].'%')
+                ->where(['is_match'=>$orgaSerch_arr['serchForm']['mappingStatus']])
+                ->where('is_delete',0)->paginate($orgaSerch_arr['pageData']['size']);
+        }elseif($orgaSerch_arr['serchForm']['mappingStatus'] == null){
+            $orgaData = $orgaModel
+                ->where('orga_name','like','%'.$orgaSerch_arr['serchForm']['serchName'].'%')
+                ->where(['belongs_orga'=>$orgaSerch_arr['serchForm']['orgaInfo']])
+                ->where('is_delete',0)->paginate($orgaSerch_arr['pageData']['size']);
+        }elseif($orgaSerch_arr['serchForm']['orgaInfo'] == null && $orgaSerch_arr['serchForm']['mappingStatus'] == null){
+            $orgaData = $orgaModel
+                ->where('orga_name','like','%'.$orgaSerch_arr['serchForm']['serchName'].'%')
+                ->where('is_delete',0)->paginate($orgaSerch_arr['pageData']['size']);
+        }else{
+            $orgaData = $orgaModel
+                ->where('orga_name','like','%'.$orgaSerch_arr['serchForm']['serchName'].'%')
+                ->where(['belongs_orga'=>$orgaSerch_arr['serchForm']['orgaInfo']])
+                ->where(['is_match'=>$orgaSerch_arr['serchForm']['mappingStatus']])
+                ->where('is_delete',0)->paginate($orgaSerch_arr['pageData']['size']);
+        }
+
+        $total = count($orgaData);
 
         if($orgaData){
             $findData = [
                 'errno'         => 0,
                 'msg'           => 'ok',
-                'orgaData'      => $orgaData
+                'total'         => $total,
+                'serchOrgaData'      => $orgaData
             ];
         }else{
             $findData = [
@@ -94,51 +126,13 @@ class OrgaindexController extends Controller
     }
 
     /*
-     *  机构指标修改查询
-     * */
-    public function updFindOrga(){
-        $id = 1;
-
-        $orgaData = DB::table('orga_index')->find($id);
-
-        if($orgaData){
-            $updData = [
-                'errno'     => 0,
-                'msg'       => 'ok',
-                'orgaData'   => $orgaData
-            ];
-        }else{
-            $updData = [
-                'errno'     => 1,
-                'msg'       => 'false'
-            ];
-        }
-
-        echo json_encode($updData);
-    }
-
-    /*
      *  机构指标修改
      * */
     public function editOrga(){
 
-        $id = 1;
+        $orgaData = json_decode(file_get_contents('php://input'),true);
 
-        $orgaData = [
-            'orga_name'         => Str::random(8),
-            'is_comparison'     => 0,
-            'orga_unit'         => 'L',
-            'upper_limit'       => mt_rand(0,800),
-            'lower_limit'       => mt_rand(900,4000),
-            'normal_message'    => Str::random(10),
-            'high_message'      => Str::random(10),
-            'low_message'       => Str::random(10),
-            'belongs_orga'      => Str::random(6),
-            'exam_id'           => mt_rand(1,5),
-            'is_match'          => 1
-        ];
-
-        $res = DB::table('orga_index')->where(['id'=>$id])->update($orgaData);
+        $res = DB::table('orga_index')->where(['id'=>$orgaData['id']])->update($orgaData);
 
         if($res){
             $editData = [
@@ -163,8 +157,10 @@ class OrgaindexController extends Controller
 
         $id = json_decode(file_get_contents('php://input'),true);
 //        print_r($id);die;
+        foreach($id as $v){
+            $res = DB::table('orga_index')->where(['id'=>$v])->update(['is_delete'=>1]);
+        }
 
-        $res = DB::table('orga_index')->where(['id'=>$id])->update(['is_delete'=>1]);
 
         if($res){
             $delData = [
@@ -187,7 +183,7 @@ class OrgaindexController extends Controller
     * */
     public function orgaFill(){
         $now = time();
-        for($i=0;$i<20;$i++){
+        for($i=0;$i<200;$i++){
             $orgadata = [
                 'orga_id'          => $this->generateOrgaId(),
                 'orga_name'         => Str::random(8),
@@ -198,7 +194,7 @@ class OrgaindexController extends Controller
                 'normal_message'    => Str::random(10),
                 'high_message'      => Str::random(10),
                 'low_message'       => Str::random(10),
-                'belongs_orga'      => Str::random(6),
+                'belongs_orga'      => mt_rand(1,6),
                 'exam_id'           => mt_rand(1,5),
                 'is_match'          => 0,
                 'orga_add_time'    => $now
@@ -230,8 +226,5 @@ class OrgaindexController extends Controller
 
         return 'JGZB'.$orgalength;
     }
-
-
-
 
 }
