@@ -84,9 +84,9 @@ class ExamitemController extends Controller
     public function searchitem(Request $request){
 
         $condition = [
-            "item_id"   => 'TJXM2OO5mT',
-//            "district"  => $_GET['district'],
-//            "organization" => $_GET['organization']
+            "item_id"   => $_GET['item_id'],
+            "district"  => $_GET['district'],
+            "organization" => $_GET['organization']
         ];
         $size = $request->get('size');
         //按id查询
