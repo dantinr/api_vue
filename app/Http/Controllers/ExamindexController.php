@@ -40,29 +40,31 @@ class ExamindexController extends Controller
     /**
      * 搜索
      */
-        public function inquire(){
+        public function inquire(Request $request){
                 $condition = [
                     "exam_name"   => 'yOkjedKq',
                     "exam_whether"  => 0,
                 ];
                 $exam_name = $condition['exam_name'];
                 $exam_whether = $condition['exam_whether'];
+            $size = $request ->get('size');
                 //按id查询
                 if(!empty($exam_name||$exam_name==0) && !empty($exam_whether||$exam_whether==0)){
                     //判断第一个字符，如果是 英文就是 id  否则就是 项目名称
                         $list = DB::table("exam_index")
                             ->where('exam_whether','=',$exam_whether)
                             ->Where('exam_name','like',"%$exam_name%")
-                            ->get()
-                            ->toArray();
+                            ->Where(['exam_delete'=>0])
+                            ->paginate($size);
+
 
                 }else if(!empty($exam_name) || !empty($exam_whether)){
 
                     $list = DB::table("exam_index")
                         ->where('exam_whether','=',$exam_whether)
                         ->orWhere('exam_name','like',"%$exam_name%")
-                        ->get()
-                        ->toArray();
+                        ->Where(['exam_delete'=>0])
+                        ->paginate($size);
                 }else{
 
                         $list = DB::table("exam_index")->get()->toArray();
