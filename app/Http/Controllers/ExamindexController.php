@@ -19,9 +19,10 @@ class ExamindexController extends Controller
      */
     public function comboList()
     {
-        $id = 1;
+
+//        $id = 1;
         //$row = DB::table("combo")->find($id);     //查询一条记录
-        $list = DB::table("exam_index")->limit(10)->get()->toArray();
+        $list = DB::table("exam_index")->limit(10)->paginate(10)->toArray();
         //echo '<pre>';print_r($list);echo '</pre>';
 
         $data = [
@@ -31,6 +32,7 @@ class ExamindexController extends Controller
                 'list'  => $list
             ]
         ];
+        return $list;
         echo json_encode($data,JSON_UNESCAPED_UNICODE);
     }
 
@@ -157,6 +159,7 @@ class ExamindexController extends Controller
         }
     }
 
+
     public function test()
     {
 
@@ -197,6 +200,7 @@ class ExamindexController extends Controller
     private function generateComboId()
     {
         return "BZZB-". Str::random(8);
+
     }
 
 

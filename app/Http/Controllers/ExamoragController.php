@@ -45,21 +45,22 @@ class ExamoragController extends Controller
     public function addExam()
     {
         $examData = json_decode(file_get_contents('php://input'),true);
+        
         $data = [
             'exam_id' => $this->generateExamId(),
-            'exam_name' => $_POST['exam_name'],
-            'exam_branch' => $_POST['exam_branch'],
-            'exam_city' => $_POST['exam_city'],
-            'exam_genre' => $_POST['exam_genre'],
-            'exam_tel' => $_POST['exam_tel'],
-            'exam_start' => $_POST['exam_start'],
+            'exam_name' => $examData['exam_name'],
+            'exam_branch' => $examData['exam_branch'],
+            'exam_city' => $examData['exam_city'],
+            'exam_genre' => $examData['exam_genre'],
+            'exam_tel' => $examData['exam_tel'],
+            'exam_start' => $examData['exam_start'],
             'exam_img'  => 'https://img0.baidu.com/it/u=2151136234,3513236673&fm=26&fmt=auto&gp=0.jpg',
-            'exam_property' => $_POST['exam_property'],
-            'exam_coord1'  => $_POST['exam_coord1'],
-            'exam_coord2'  => $_POST['exam_coord2'],
+            'exam_property' => $examData['exam_property'],
+            'exam_coord1'  => $examData['exam_coord1'],
+            'exam_coord2'  => $examData['exam_coord2'],
 
         ];
-
+        $_POST = $data;
         $id = DB::table('exam_orga')->insertGetId($examData);
         if($id){
             $examInfo = [
@@ -145,23 +146,38 @@ class ExamoragController extends Controller
      */
     public function findExam()
     {
-        $exam_name = '试试';
-        $exam_city = '上';
-        $exam_start = 1;
-        $exam_genre = '天津';
+        $condition = [
 
-        $examData = DB::table('exam_orga')
-            ->where('exam_name','like','%'.$exam_name.'%')
-            ->orWhere('exam_city','like','%'.$exam_city.'%')
-            ->orWhere('exam_genre','like','%'.$exam_genre.'%')
-            ->orWhere('exam_start','==',$exam_start)
-            ->get()->toArray();
+            "exam_name" => $_GET['exam_name'],
+            "exam_city" => $_GET['exam_city'],
+            "exam_start" => $_GET['exam_start'],
+            "exam_genre" => $_GET['exam_genre'],
+        ];
+        
+        //id查询
+        if(isset($condition["exam_name"]) && !empty($condition["exam_name"])){
+            $patten = '/^[0-9].*/';
+            if(preg_match($patten,$condition["exam_name"])){
+                $list = DB::table("exam_orga")->where('exam_name','like','%'.$condition["exam_name"].'%')->get()->toArray();
+            }
+        }else{
+            if(isset($condition["exam_city"])&& !empty($condition["exam_city"])){
 
-        if($examData){
+                $list = DB::table("exam_orga")->where('exam_city','like','%'.$condition["exam_city"].'%')->get()->toArray();
+             }else if(isset($condition["exam_start"])){
+ 
+                 $list = DB::table("exam_orga")->where('exam_start','like','%'.$condition["exam_start"].'%')->get()->toArray();
+             }else if(isset($condition["exam_genre"])){
+ 
+                $list = DB::table("exam_orga")->where('exam_genre','like','%'.$condition["exam_genre"].'%')->get()->toArray();
+            }
+        }
+
+        if($list){
             $findData = [
                 'errno'         => 0,
                 'msg'           => 'ok',
-                'examData'      => $examData
+                'examData'      => $list
             ];
         }else{
             $findData = [
@@ -173,6 +189,7 @@ class ExamoragController extends Controller
         echo json_encode($findData,JSON_UNESCAPED_UNICODE);
 
     }
+    
 
 
 
