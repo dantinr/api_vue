@@ -66,7 +66,7 @@ class ExamitemController extends Controller
     {
         //?page=2&size=10
         $size = $request->get('size');
-        $list = DB::table("exam_items")->paginate($size);
+        $list = DB::table("exam_items")->orderBy('id', 'desc') ->paginate($size);
 
         $data = [
             'errno' => 0,
@@ -85,7 +85,7 @@ class ExamitemController extends Controller
 
         $condition = [
             "item_id"   => $_GET['item_id'],
-            "location"  => $_GET['location'],
+            "district"  => $_GET['district'],
             "organization" => $_GET['organization']
         ];
 
@@ -102,9 +102,9 @@ class ExamitemController extends Controller
             }
         }else{
 
-            if(isset($condition["location"])&& !empty($condition["location"])){
+            if(isset($condition["district"])&& !empty($condition["district"])){
 
-               $list = DB::table("exam_items")->where('location','like','%'.$condition["location"].'%')->get()->toArray();
+               $list = DB::table("exam_items")->where('district','like','%'.$condition["district"].'%')->get()->toArray();
             }else if(isset($condition["organization"])){
 
                 $list = DB::table("exam_items")->where('organization','like','%'.$condition["organization"].'%')->get()->toArray();

@@ -35,7 +35,6 @@ Route::post('/addCombo',"ComboController@addCombo");//添加套餐
 //机构指标
 Route::get('/orga/orgaList',"OrgaindexController@orgaList");     //机构指标列表
 Route::post('/orga/addOrga',"OrgaindexController@addOrga");     //机构指标添加
-Route::post('/orga/updFindOrga',"OrgaindexController@updFindOrga");     //机构指标修改查询
 Route::post('/orga/editOrga',"OrgaindexController@editOrga");     //机构指标修改
 Route::post('/orga/delOrga',"OrgaindexController@delOrga");     //机构指标删除
 Route::post('/orga/findOrga',"OrgaindexController@findOrga");     //机构指标查询
@@ -60,6 +59,7 @@ Route::get('/book/edit',"BookController@editBook");      //编辑套餐
 
 // Liwei测试
 Route::get('/liwei/test',"LiweiController@test");
+Route::post('/liwei/test2',"LiweiController@test2");
 
 //体检机构
 Route::get('/examo/hello',"ExamoragController@hello");
