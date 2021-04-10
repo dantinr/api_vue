@@ -15,7 +15,7 @@ class OrgaindexController extends Controller
 
         $size = $request->get("size");      //数据条数
 
-        $orgaList = DB::table('orga_index')->where('is_delete',0)->paginate($size);
+        $orgaList = DB::table('orga_index')->where('is_delete',0)->orderBy('id','desc')->paginate($size);
         $total = DB::table('orga_index')->where('is_delete',0)->count();
 //        print_r($total);die;
 

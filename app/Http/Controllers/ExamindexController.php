@@ -17,12 +17,13 @@ class ExamindexController extends Controller
     /**
      * 获取套餐列表
      */
-    public function comboList()
+    public function comboList(Request $request)
     {
 
 //        $id = 1;
         //$row = DB::table("combo")->find($id);     //查询一条记录
-        $list = DB::table("exam_index")->limit(10)->paginate(10)->toArray();
+        $size = $request ->get('size');
+        $list = DB::table("exam_index")->orderBy('id','desc')->paginate($size);
         //echo '<pre>';print_r($list);echo '</pre>';
 
         $data = [
@@ -39,29 +40,31 @@ class ExamindexController extends Controller
     /**
      * 搜索
      */
-        public function inquire(){
+        public function inquire(Request $request){
                 $condition = [
-                    "exam_name"   => 'yOkjedKq',
-                    "exam_whether"  => 0,
+                    "exam_name"   => 'c',
+                    "exam_whether"  => 1,
                 ];
                 $exam_name = $condition['exam_name'];
                 $exam_whether = $condition['exam_whether'];
+            $size = $request ->get('size');
                 //按id查询
                 if(!empty($exam_name||$exam_name==0) && !empty($exam_whether||$exam_whether==0)){
                     //判断第一个字符，如果是 英文就是 id  否则就是 项目名称
                         $list = DB::table("exam_index")
                             ->where('exam_whether','=',$exam_whether)
                             ->Where('exam_name','like',"%$exam_name%")
-                            ->get()
-                            ->toArray();
+                            ->Where('exam_delete',0)
+                            ->paginate($size);
+
 
                 }else if(!empty($exam_name) || !empty($exam_whether)){
 
                     $list = DB::table("exam_index")
                         ->where('exam_whether','=',$exam_whether)
                         ->orWhere('exam_name','like',"%$exam_name%")
-                        ->get()
-                        ->toArray();
+                        ->Where(['exam_delete'=>0])
+                        ->paginate($size);
                 }else{
 
                         $list = DB::table("exam_index")->get()->toArray();
@@ -80,15 +83,15 @@ class ExamindexController extends Controller
 
 
         $data = [
-            'exam_id'      => 'TJXM00002',
-            'exam_name'    => '红细胞计数',
-            'exam_unit'    => 'L',
-            'exam_cap'     =>  400,
-            'exam_floor'   => 800,
-            'exam_normal'  => '正常',
-            'exam_piangao' =>  '偏高'  ,
-            'exam_flat'    =>  '偏低',
-            'exam_whether' =>   1
+//            'exam_id'      => 'TJXM00002',
+//            'exam_name'    => '红细胞计数',
+//            'exam_unit'    => 'L',
+//            'exam_cap'     =>  400,
+//            'exam_floor'   => 800,
+//            'exam_normal'  => '正常',
+//            'exam_piangao' =>  '偏高'  ,
+//            'exam_flat'    =>  '偏低',
+//            'exam_whether' =>   1
         ];
 
         $id = DB::table('exam_index')->insertGetId($data);

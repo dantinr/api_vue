@@ -25,7 +25,7 @@ class ExamitemController extends Controller
             'item_id'      => 'TJXM'.Str::random(6),
             'item_name'    =>$d['item_name'],
             'is_avaliable'=>$d['is_avaliable'],
-            'label'=>$d['label'],
+            'label'=>explode(',',$d['label']),
             'price'         => $d['price'],
             'price_now'     => $d['price_now'],
             'location'      => $d['location'],
@@ -66,7 +66,7 @@ class ExamitemController extends Controller
     {
         //?page=2&size=10
         $size = $request->get('size');
-        $list = DB::table("exam_items")->paginate($size);
+        $list = DB::table("exam_items")->where(['is_delete'=>0])->orderBy('id', 'desc') ->paginate($size);
 
         $data = [
             'errno' => 0,
@@ -81,33 +81,33 @@ class ExamitemController extends Controller
     /**
      * 搜索
      */
-    public function searchitem(){
+    public function searchitem(Request $request){
 
         $condition = [
             "item_id"   => $_GET['item_id'],
-            "location"  => $_GET['location'],
+            "district"  => $_GET['district'],
             "organization" => $_GET['organization']
         ];
-
+        $size = $request->get('size');
         //按id查询
         if(isset($condition["item_id"]) && !empty($condition["item_id"])){
             //判断第一个字符，如果是 英文就是 id  否则就是 项目名称
 
             $patten = '/^[a-zA-Z].*/';
             if(preg_match($patten,$condition["item_id"])){
-                $list = DB::table("exam_items")->where('item_id','like','%'.$condition["item_id"].'%')->get()->toArray();
+                $list = DB::table("exam_items")->where('item_id','like','%'.$condition["item_id"].'%')->where(['is_delete'=>0])->paginate($size);
             }else{
-                $list = DB::table("exam_items")->where('item_name','like','%'.$condition["item_id"].'%')->get()->toArray();
+                $list = DB::table("exam_items")->where('item_name','like','%'.$condition["item_id"].'%')->where(['is_delete'=>0])->paginate($size);
 
             }
         }else{
 
-            if(isset($condition["location"])&& !empty($condition["location"])){
+            if(isset($condition["district"])&& !empty($condition["district"])){
 
-               $list = DB::table("exam_items")->where('location','like','%'.$condition["location"].'%')->get()->toArray();
+               $list = DB::table("exam_items")->where('district','like','%'.$condition["district"].'%')->where(['is_delete'=>0])->paginate($size);
             }else if(isset($condition["organization"])){
 
-                $list = DB::table("exam_items")->where('organization','like','%'.$condition["organization"].'%')->get()->toArray();
+                $list = DB::table("exam_items")->where('organization','like','%'.$condition["organization"].'%')->where(['is_delete'=>0])->paginate($size);
             }
 
 
@@ -125,7 +125,7 @@ class ExamitemController extends Controller
             ];
         }
 
-        return json_encode($findData);
+        return json_encode($findData,JSON_UNESCAPED_UNICODE);
 
     }
     /**
@@ -139,7 +139,7 @@ class ExamitemController extends Controller
             'item_id'      => 'TJXM'.Str::random(6),
             'item_name'    =>$d['item_name'],
             'is_avaliable'=>$d['is_avaliable'],
-            'label'=>$d['label'],
+            'label'=>explode(',',$d['label']),
             'price'         => $d['price'],
             'price_now'     => $d[ 'price_now'],
             'location'      => $d['location'],
