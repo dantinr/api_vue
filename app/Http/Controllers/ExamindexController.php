@@ -83,15 +83,15 @@ class ExamindexController extends Controller
 
 
         $data = [
-            'exam_id'      => 'TJXM00002',
-            'exam_name'    => '红细胞计数',
-            'exam_unit'    => 'L',
-            'exam_cap'     =>  400,
-            'exam_floor'   => 800,
-            'exam_normal'  => '正常',
-            'exam_piangao' =>  '偏高'  ,
-            'exam_flat'    =>  '偏低',
-            'exam_whether' =>   1
+//            'exam_id'      => 'TJXM00002',
+//            'exam_name'    => '红细胞计数',
+//            'exam_unit'    => 'L',
+//            'exam_cap'     =>  400,
+//            'exam_floor'   => 800,
+//            'exam_normal'  => '正常',
+//            'exam_piangao' =>  '偏高'  ,
+//            'exam_flat'    =>  '偏低',
+//            'exam_whether' =>   1
         ];
 
         $id = DB::table('exam_index')->insertGetId($data);
@@ -119,7 +119,7 @@ class ExamindexController extends Controller
      */
     public function deleteCombo()
     {
-        $id = 3;
+        $id =$_POST['id'];
         $res = DB::table("exam_index")->where(['id'=>$id])->update(['exam_delete'=>'1']);
         if($res){
           $delData=[
