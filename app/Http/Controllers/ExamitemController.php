@@ -145,7 +145,7 @@ class ExamitemController extends Controller
             'location'      => $d['location'],
             'district'     =>$d['district'],
             'organization'  => $d['organization'],
-            'embranchment'      => $d['embranchment'],
+            'embranchment'      => explode(',',$d['embranchment']),
             'scope'=>$d['scope'],
             'significance'=>$d['significance'],
             'attention'=>$d['attention'],
