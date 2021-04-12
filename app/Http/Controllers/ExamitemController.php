@@ -134,10 +134,12 @@ class ExamitemController extends Controller
      */
     public function edititem()
     {
+        $now = time();
         $d=json_decode(file_get_contents("php://input"),true);
         $id = $d['id'];
         $data = [
-            'item_id'      => 'TJXM'.Str::random(6),
+
+            
             'item_name'    =>$d['item_name'],
             'is_avaliable'=>$d['is_avaliable'],
             'label'=>implode(',',$d['label']),
