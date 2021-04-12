@@ -22,20 +22,33 @@ class ExamitemController extends Controller
         $now = time();
         $d=json_decode(file_get_contents("php://input"),true);
         $data = [
+//            'item_id'      => 'TJXM'.Str::random(6),
+//            'item_name'    =>$d['item_name'],
+//            'is_avaliable'=>$d['is_avaliable'],
+//            'label'=>explode(',',$d['label']),
+//            'price'         => $d['price'],
+//            'price_now'     => $d['price_now'],
+//            'location'      => $d['location'],
+//            'district'     =>$d['district'],
+//            'organization'  => $d['organization'],
+//            'embranchment'      =>explode(',',$d['embranchment']),
+//            'scope'=>$d['scope'],
+//            'significance'=>$d['significance'],
+//            'attention'=>$d['attention'],
+//            'add_time'=>$now,
             'item_id'      => 'TJXM'.Str::random(6),
-            'item_name'    =>$d['item_name'],
-            'is_avaliable'=>$d['is_avaliable'],
-            'label'=>explode(',',$d['label']),
-            'price'         => $d['price'],
-            'price_now'     => $d['price_now'],
-            'location'      => $d['location'],
-            'district'     =>$d['district'],
-            'organization'  => $d['organization'],
-            'embranchment'      =>explode(',',$d['embranchment']),
-            'scope'=>$d['scope'],
-            'significance'=>$d['significance'],
-            'attention'=>$d['attention'],
-            'add_time'=>$now,
+            'item_name'    =>'1',
+            'is_avaliable'=>1,
+            'label'=>implode(',',['1','2','3']),
+            'price'         => '22',
+            'price_now'     => '22',
+            'location'      => 'wdqw',
+            'district'     =>'www',
+            'organization'  => 2,
+            'embranchment'      => implode(',',['1','2','3']),
+            'scope'=>'weq',
+            'significance'=>'wqeqw',
+            'attention'=>'eqweqw',
         ];
 
         $id = DB::table('exam_items')->insertGetId($data);
@@ -149,6 +162,7 @@ class ExamitemController extends Controller
             'scope'=>$d['scope'],
             'significance'=>$d['significance'],
             'attention'=>$d['attention'],
+
 
         ];
 
