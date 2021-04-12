@@ -119,7 +119,7 @@ class ExamindexController extends Controller
      */
     public function deleteCombo()
     {
-        $id = 3;
+        $id =$_POST['id'];
         $res = DB::table("exam_index")->where(['id'=>$id])->update(['exam_delete'=>'1']);
         if($res){
           $delData=[
