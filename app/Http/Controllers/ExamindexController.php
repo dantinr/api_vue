@@ -41,13 +41,15 @@ class ExamindexController extends Controller
      * 搜索
      */
         public function inquire(Request $request){
-                $condition = [
-                    "exam_name"   => 'c',
-                    "exam_whether"  => 1,
-                ];
-                $exam_name = $condition['exam_name'];
-                $exam_whether = $condition['exam_whether'];
-            $size = $request ->get('size');
+//                $condition = [
+//                    "exam_name"   => 'c',
+//                    "exam_whether"  => 1,
+//                ];
+                $exam_name = $request->exam_name;
+                $exam_whether = $request->exam_whether;
+
+
+                $size = $request ->get('size');
                 //按id查询
                 if(!empty($exam_name||$exam_name==0) && !empty($exam_whether||$exam_whether==0)){
                     //判断第一个字符，如果是 英文就是 id  否则就是 项目名称
@@ -120,18 +122,26 @@ class ExamindexController extends Controller
     public function deleteCombo()
     {
         $id = json_decode(file_get_contents('php://input'),true);
+
         $res = DB::table("exam_index")->where(['id'=>$id])->update(['exam_delete'=>'1']);
+
         if($res){
           $delData=[
               "errno" => 0,
               "msg"   => "删除成功",
               "$res"    => $res
           ];
+        }else{
+            $delData=[
+                "errno" => 1,
+                "msg"   => "删除失败"
+            ];
         }
 
 
 
-        return $delData;
+
+        echo json_encode($delData);
 
 
     }
