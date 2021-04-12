@@ -80,19 +80,19 @@ class ExamindexController extends Controller
      */
     public function addCombo()
     {
+        $data = json_decode(file_get_contents('php://input'),true);
 
-
-        $data = [
-//            'exam_id'      => 'TJXM00002',
-//            'exam_name'    => '红细胞计数',
-//            'exam_unit'    => 'L',
-//            'exam_cap'     =>  400,
-//            'exam_floor'   => 800,
-//            'exam_normal'  => '正常',
-//            'exam_piangao' =>  '偏高'  ,
-//            'exam_flat'    =>  '偏低',
-//            'exam_whether' =>   1
-        ];
+//        $data = [
+////            'exam_id'      => 'TJXM00002',
+////            'exam_name'    => '红细胞计数',
+////            'exam_unit'    => 'L',
+////            'exam_cap'     =>  400,
+////            'exam_floor'   => 800,
+////            'exam_normal'  => '正常',
+////            'exam_piangao' =9b
+////            'exam_flat'    =>  '偏低',
+////            'exam_whether' =>   1
+//        ];
 
         $id = DB::table('exam_index')->insertGetId($data);
         var_dump($id);
