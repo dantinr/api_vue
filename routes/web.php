@@ -88,4 +88,4 @@ Route::post('/exam/edit',"ExamindexController@editCombo");      //编辑套餐
 Route::post('/exam/delete',"ExamindexController@deleteCombo");      //删除套餐
 Route::post('/exam/fill',"ExamindexController@fillData");
 Route::post('/exam/deleteCombo',"ExamindexController@deleteCombo");
-Route::get('/exam/inquire',"ExamindexController@inquire");
+Route::post('/exam/inquire',"ExamindexController@inquire"); //搜索
