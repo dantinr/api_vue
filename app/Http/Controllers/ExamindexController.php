@@ -23,7 +23,7 @@ class ExamindexController extends Controller
 //        $id = 1;
         //$row = DB::table("combo")->find($id);     //查询一条记录
         $size = $request ->get('size');
-        $list = DB::table("exam_index")->orderBy('id','desc')->paginate($size);
+        $list = DB::table("exam_index")->where(['exam_delete'=>0])->orderBy('id','desc')->paginate($size);
         //echo '<pre>';print_r($list);echo '</pre>';
 
         $data = [
