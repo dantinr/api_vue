@@ -81,7 +81,7 @@ class ExamindexController extends Controller
     public function addCombo()
     {
         $data = json_decode(file_get_contents('php://input'),true);
-
+        $data['exam_id'] = 'BZZB-'.Str::random(8);
 //        $data = [
 ////            'exam_id'      => 'TJXM00002',
 ////            'exam_name'    => '红细胞计数',
@@ -104,12 +104,12 @@ class ExamindexController extends Controller
      */
     public function editCombo()
     {
-        $id = 3 ;
-        $data = [
-            'price' => 180000
-        ];
-
-        $res = DB::table("exam_index")->where(['id'=>$id])->update($data);
+//        $id = 3 ;
+//        $data = [
+//            'price' => 180000
+//        ];
+        $data = json_decode(file_get_contents('php://input'),true);
+        $res = DB::table("exam_index")->where(['id'=>$data['id']])->update($data);
         var_dump($res);
         echo "更新套餐";
     }
@@ -119,7 +119,7 @@ class ExamindexController extends Controller
      */
     public function deleteCombo()
     {
-        $id =$_POST['id'];
+        $id = json_decode(file_get_contents('php://input'),true);
         $res = DB::table("exam_index")->where(['id'=>$id])->update(['exam_delete'=>'1']);
         if($res){
           $delData=[
