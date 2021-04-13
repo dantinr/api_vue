@@ -48,7 +48,7 @@ class ExamoragController extends Controller
     {
         $examData = json_decode(file_get_contents('php://input'),true);
 
-        $examData['exam_img'] = 'https://img0.baidu.com/it/u=2151136234,3513236673&fm=26&fmt=auto&gp=0.jpg';
+        //$examData['exam_img'] = 'https://img0.baidu.com/it/u=2151136234,3513236673&fm=26&fmt=auto&gp=0.jpg';
         
         // print_r($examData);die;
         
@@ -132,7 +132,7 @@ class ExamoragController extends Controller
         $condition = json_decode(file_get_contents('php://input'),true);
         
         // print_r($condition);die;
-        $list = DB::table("exam_orga")->where('exam_name','like','%'.$condition["findData"]["user"].'%')->paginate($condition["findData"]["size"]);
+        $list = DB::table("exam_orga")->where('exam_name','like','%'.$condition["findData"]["exam_name"].'%')->paginate($condition["findData"]["size"]);
         //id查询
         // if(isset($condition["exam_name"]) && !empty($condition["exam_name"])){
             // $patten = '/^[0-9].*/';
