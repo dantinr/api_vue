@@ -22,4 +22,4 @@
         ]
     ];
 
-    return json_encode($books,JSON_UNESCAPED_UNICODE);
+    echo json_encode($books,JSON_UNESCAPED_UNICODE);
