@@ -15,19 +15,13 @@ class BookController extends Controller
     public function bookSearch()
     {
         $data_table1 = [
-            'book_status'  => '',//$_POST['book_status'],
-            'user_name'  => '',//$_POST['user_name'],
-            'user_tel'   => '16666666666',//$_POST['user_tel'],
-            'book_num'   => '',//$_POST['book_num']
+            'user_tel'   => $_GET['user_tel'],
+            'book_status'=> $_GET['book_status'],
         ];
-        if(isset($data_table1['book_status'])&&!empty($data_table1['book_status'])){
-            $list = DB::table("book_info")->where('book_status',$data_table1['book_status'])->get()->toArray();
-        }else if(isset($data_table1['user_name'])&&!empty($data_table1['user_name'])){
-            $list = DB::table("book_info")->where('user_name',$data_table1['user_name'])->get()->toArray();
-        }else if(isset($data_table1['user_tel'])&&!empty($data_table1['user_tel'])){
+        if(isset($data_table1['user_tel'])&&!empty($data_table1['user_tel'])){
             $list = DB::table("book_info")->where('user_tel',$data_table1['user_tel'])->get()->toArray();
-        }else if(isset($data_table1['book_num'])&&!empty($data_table1['book_num'])){
-            $list = DB::table("book_info")->where('book_num',$data_table1['book_num'])->get()->toArray();
+        }else if(isset($data_table1['book_status'])&&!empty($data_table1['book_status'])){
+            $list = DB::table("book_info")->where('book_status',$data_table1['book_status'])->get()->toArray();
         }
         
         $data = [
@@ -61,22 +55,20 @@ class BookController extends Controller
     /**
      * 修改 状态
      */
-    public function editBook()
+    public function editBook(Request $request)
     {
-
-        $idCard = $_POST['user_idcard'];
+        $id = $_GET['id'];
         $data = [
-            'book_status' => $_POST['book_status'],
-            'book_time'   =>time()
+            'book_status' => $_GET['book_status'],
+            'book_time' => $_GET['book_time'],
         ];
-
+        $id = $request->id;
         if($data['book_status']){
             unset($data['book_time']);
         }else{
             unset($data['book_status']);
         }
-        $res = DB::table("book_info")->where(['user_idcard'=>$idCard])->update($data);
-
+        $res = DB::table("book_info")->where(['id'=>$id])->update($data);
         
         // var_dump($res);
         // echo "更新预约信息成功";
