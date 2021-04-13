@@ -33,6 +33,7 @@ class ExamindexController extends Controller
                 'list'  => $list
             ]
         ];
+
         return $list;
         echo json_encode($data,JSON_UNESCAPED_UNICODE);
     }
