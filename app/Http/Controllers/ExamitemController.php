@@ -25,17 +25,18 @@ class ExamitemController extends Controller
             'item_id'      => 'TJXM'.Str::random(6),
             'item_name'    =>$d['item_name'],
             'is_avaliable'=>$d['is_avaliable'],
-            'label'=>explode(',',$d['label']),
+            'label'=>implode(',',$d['label']),
             'price'         => $d['price'],
             'price_now'     => $d['price_now'],
             'location'      => $d['location'],
             'district'     =>$d['district'],
             'organization'  => $d['organization'],
-            'embranchment'      => $d['embranchment'],
+            'embranchment'      =>implode(',',$d['embranchment']),
             'scope'=>$d['scope'],
             'significance'=>$d['significance'],
             'attention'=>$d['attention'],
             'add_time'=>$now,
+
         ];
 
         $id = DB::table('exam_items')->insertGetId($data);
@@ -133,22 +134,25 @@ class ExamitemController extends Controller
      */
     public function edititem()
     {
+        $now = time();
         $d=json_decode(file_get_contents("php://input"),true);
         $id = $d['id'];
         $data = [
-            'item_id'      => 'TJXM'.Str::random(6),
+
+            
             'item_name'    =>$d['item_name'],
             'is_avaliable'=>$d['is_avaliable'],
-            'label'=>explode(',',$d['label']),
+            'label'=>implode(',',$d['label']),
             'price'         => $d['price'],
             'price_now'     => $d[ 'price_now'],
             'location'      => $d['location'],
             'district'     =>$d['district'],
             'organization'  => $d['organization'],
-            'embranchment'      => $d['embranchment'],
+            'embranchment'      => implode(',',$d['embranchment']),
             'scope'=>$d['scope'],
             'significance'=>$d['significance'],
             'attention'=>$d['attention'],
+
 
         ];
 
