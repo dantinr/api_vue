@@ -17,26 +17,28 @@ class ExamoragController extends Controller
     /**
      * 获取体检机构表
      */
-    public function examList()
+    public function examList(Request $request)
     {
-        $id = 1;
-        // $row = DB::table("exam_orga")->find($id);
-        $list = DB::table("exam_orga")->limit(10)->get()->toArray();
+        $size = $request->get("size");
+        
+        $list = DB::table("exam_orga")->where('is_delete',0)->orderBy('id','desc')->paginate($size);
+        $total = DB::table("exam_orga")->where('is_delete',0)->count();
 
         if($list){
             $data = [
             'errno' => 0,
             'msg'   => 'ok',
+            'total' =>$total,
             'data'  => $list
             ];
         }else{
             $data = [
                 'error' => 1,
-                'msg' => '000'
+                'msg' => '列表无数据'
             ];
         }
         
-        return json_encode($data);
+        echo json_encode($data);
     }
     /**
      * 添加
@@ -45,21 +47,11 @@ class ExamoragController extends Controller
     public function addExam()
     {
         $examData = json_decode(file_get_contents('php://input'),true);
-        $data = [
-            'exam_id' => $this->generateExamId(),
-            'exam_name' => $_POST['exam_name'],
-            'exam_branch' => $_POST['exam_branch'],
-            'exam_city' => $_POST['exam_city'],
-            'exam_genre' => $_POST['exam_genre'],
-            'exam_tel' => $_POST['exam_tel'],
-            'exam_start' => $_POST['exam_start'],
-            'exam_img'  => 'https://img0.baidu.com/it/u=2151136234,3513236673&fm=26&fmt=auto&gp=0.jpg',
-            'exam_property' => $_POST['exam_property'],
-            'exam_coord1'  => $_POST['exam_coord1'],
-            'exam_coord2'  => $_POST['exam_coord2'],
 
-        ];
-
+        //$examData['exam_img'] = 'https://img0.baidu.com/it/u=2151136234,3513236673&fm=26&fmt=auto&gp=0.jpg';
+        
+        // print_r($examData);die;
+        
         $id = DB::table('exam_orga')->insertGetId($examData);
         if($id){
             $examInfo = [
@@ -81,32 +73,19 @@ class ExamoragController extends Controller
      */
     public function editExam()
     {
-        $id= 1;
-        $data = [
-            // 'exam_id' => $this->generateExamId(),
-            'exam_id' => $this->generateExamId(),
-            'exam_name' => $_POST['exam_name'],
-            'exam_branch' => $_POST['exam_branch'],
-            'exam_city' => $_POST['exam_city'],
-            'exam_genre' => $_POST['exam_genre'],
-            'exam_tel' => $_POST['exam_tel'],
-            'exam_start' => $_POST['exam_start'],
-            'exam_img'  => 'https://img0.baidu.com/it/u=2151136234,3513236673&fm=26&fmt=auto&gp=0.jpg',
-            'exam_property' => $_POST['exam_property'],
-            'exam_coord1'  => $_POST['exam_coord1'],
-            'exam_coord2'  => $_POST['exam_coord2'],
+        $data = json_decode(file_get_contents('php://input'),true);
 
-        ];
+        // print_r($data);die;
 
-        $res = DB::table('exam_orga')->where(['id'=>$id])->update($data);
-        if($id){
+        $res = DB::table('exam_orga')->where(['id'=>$data['id']])->update($data);
+        if($res){
             $examData = [
                 'errno'     => 0,
                 'msg'       => 'ok',
                 
             ];
         }else{
-            $examDataData = [
+            $examData = [
                 'errno'     => 1,
                 'msg'       => '失败',
             ];
@@ -120,48 +99,64 @@ class ExamoragController extends Controller
      */
     public function deleteExam()
     {
-        $id = $_GET['id'];
-        $res = DB::table("exam_orga")->where(['id'=>$id])->delete();
+        $id = json_decode(file_get_contents('php://input'),true);
+        foreach($id as $v){
+            $res = DB::table("exam_orga")->where(['id'=>$v])->update(['is_delete'=>1]);
+        
+        }
+        // print_r($res);die;
         if($res){
             //TODO删除成功
-            $response = [
+            $delData = [
                 "errno" => 0,
-                "msg" => "删除成功",
-                "id" => $id
+                "msg" => "ok",
+                "id" => $res
             ];
         }else{
-            $response = [
+            $delData  = [
                 "errno" => 1,
                 "msg" => "删除失败",
-                "id" => $id
+                
             ];
         }
-            return $response;
+            echo json_encode($delData);
 
     }
 
     /**
      * 查询
      */
-    public function findExam()
+    public function findExam(Request $request)
     {
-        $exam_name = '试试';
-        $exam_city = '上';
-        $exam_start = 1;
-        $exam_genre = '天津';
 
-        $examData = DB::table('exam_orga')
-            ->where('exam_name','like','%'.$exam_name.'%')
-            ->orWhere('exam_city','like','%'.$exam_city.'%')
-            ->orWhere('exam_genre','like','%'.$exam_genre.'%')
-            ->orWhere('exam_start','==',$exam_start)
-            ->get()->toArray();
+        $condition = json_decode(file_get_contents('php://input'),true);
+        
+        // print_r($condition);die;
+        $list = DB::table("exam_orga")->where('exam_name','like','%'.$condition["findData"]["exam_name"].'%')->paginate($condition["findData"]["size"]);
+        //id查询
+        // if(isset($condition["exam_name"]) && !empty($condition["exam_name"])){
+            // $patten = '/^[0-9].*/';
+            // if(preg_match($patten,$condition["exam_name"])){
+                
+            // }
+        // }else{
+        //     if(isset($condition["exam_city"])&& !empty($condition["exam_city"])){
 
-        if($examData){
+        //         $list = DB::table("exam_orga")->where('exam_city','like','%'.$condition["exam_city"].'%')->get()->toArray();
+        //      }else if(isset($condition["exam_start"])){
+ 
+        //          $list = DB::table("exam_orga")->where('exam_start','like','%'.$condition["exam_start"].'%')->get()->toArray();
+        //      }else if(isset($condition["exam_genre"])){
+ 
+        //         $list = DB::table("exam_orga")->where('exam_genre','like','%'.$condition["exam_genre"].'%')->get()->toArray();
+        //     }
+        // }
+
+        if($list){
             $findData = [
                 'errno'         => 0,
                 'msg'           => 'ok',
-                'examData'      => $examData
+                'examData'      => $list
             ];
         }else{
             $findData = [
@@ -172,8 +167,9 @@ class ExamoragController extends Controller
 
         echo json_encode($findData,JSON_UNESCAPED_UNICODE);
 
+    
+       
     }
-
 
 
     /**

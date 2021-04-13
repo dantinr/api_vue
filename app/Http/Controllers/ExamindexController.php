@@ -17,11 +17,13 @@ class ExamindexController extends Controller
     /**
      * 获取套餐列表
      */
-    public function comboList()
+    public function comboList(Request $request)
     {
-        $id = 1;
+
+//        $id = 1;
         //$row = DB::table("combo")->find($id);     //查询一条记录
-        $list = DB::table("exam_index")->limit(10)->get()->toArray();
+        $size = $request ->get('size');
+        $list = DB::table("exam_index")->where(['exam_delete'=>0])->orderBy('id','desc')->paginate($size);
         //echo '<pre>';print_r($list);echo '</pre>';
 
         $data = [
@@ -31,35 +33,41 @@ class ExamindexController extends Controller
                 'list'  => $list
             ]
         ];
+
+        return $list;
         echo json_encode($data,JSON_UNESCAPED_UNICODE);
     }
 
     /**
      * 搜索
      */
-        public function inquire(){
-                $condition = [
-                    "exam_name"   => 'yOkjedKq',
-                    "exam_whether"  => 0,
-                ];
-                $exam_name = $condition['exam_name'];
-                $exam_whether = $condition['exam_whether'];
+        public function inquire(Request $request){
+//                $condition = [
+//                    "exam_name"   => 'c',
+//                    "exam_whether"  => 1,
+//                ];
+                $exam_name = $request->exam_name;
+                $exam_whether = $request->exam_whether;
+
+
+                $size = $request ->get('size');
                 //按id查询
                 if(!empty($exam_name||$exam_name==0) && !empty($exam_whether||$exam_whether==0)){
                     //判断第一个字符，如果是 英文就是 id  否则就是 项目名称
                         $list = DB::table("exam_index")
                             ->where('exam_whether','=',$exam_whether)
                             ->Where('exam_name','like',"%$exam_name%")
-                            ->get()
-                            ->toArray();
+                            ->Where('exam_delete',0)
+                            ->paginate($size);
+
 
                 }else if(!empty($exam_name) || !empty($exam_whether)){
 
                     $list = DB::table("exam_index")
                         ->where('exam_whether','=',$exam_whether)
                         ->orWhere('exam_name','like',"%$exam_name%")
-                        ->get()
-                        ->toArray();
+                        ->Where(['exam_delete'=>0])
+                        ->paginate($size);
                 }else{
 
                         $list = DB::table("exam_index")->get()->toArray();
@@ -75,19 +83,19 @@ class ExamindexController extends Controller
      */
     public function addCombo()
     {
-
-
-        $data = [
-            'exam_id'      => 'TJXM00002',
-            'exam_name'    => '红细胞计数',
-            'exam_unit'    => 'L',
-            'exam_cap'     =>  400,
-            'exam_floor'   => 800,
-            'exam_normal'  => '正常',
-            'exam_piangao' =>  '偏高'  ,
-            'exam_flat'    =>  '偏低',
-            'exam_whether' =>   1
-        ];
+        $data = json_decode(file_get_contents('php://input'),true);
+        $data['exam_id'] = 'BZZB-'.Str::random(8);
+//        $data = [
+////            'exam_id'      => 'TJXM00002',
+////            'exam_name'    => '红细胞计数',
+////            'exam_unit'    => 'L',
+////            'exam_cap'     =>  400,
+////            'exam_floor'   => 800,
+////            'exam_normal'  => '正常',
+////            'exam_piangao' =9b
+////            'exam_flat'    =>  '偏低',
+////            'exam_whether' =>   1
+//        ];
 
         $id = DB::table('exam_index')->insertGetId($data);
         var_dump($id);
@@ -99,12 +107,12 @@ class ExamindexController extends Controller
      */
     public function editCombo()
     {
-        $id = 3 ;
-        $data = [
-            'price' => 180000
-        ];
-
-        $res = DB::table("exam_index")->where(['id'=>$id])->update($data);
+//        $id = 3 ;
+//        $data = [
+//            'price' => 180000
+//        ];
+        $data = json_decode(file_get_contents('php://input'),true);
+        $res = DB::table("exam_index")->where(['id'=>$data['id']])->update($data);
         var_dump($res);
         echo "更新套餐";
     }
@@ -114,19 +122,27 @@ class ExamindexController extends Controller
      */
     public function deleteCombo()
     {
-        $id = 3;
+        $id = json_decode(file_get_contents('php://input'),true);
+
         $res = DB::table("exam_index")->where(['id'=>$id])->update(['exam_delete'=>'1']);
+
         if($res){
           $delData=[
               "errno" => 0,
               "msg"   => "删除成功",
               "$res"    => $res
           ];
+        }else{
+            $delData=[
+                "errno" => 1,
+                "msg"   => "删除失败"
+            ];
         }
 
 
 
-        return $delData;
+
+        echo json_encode($delData);
 
 
     }
@@ -156,6 +172,7 @@ class ExamindexController extends Controller
             echo '</br>';
         }
     }
+
 
     public function test()
     {
@@ -197,6 +214,7 @@ class ExamindexController extends Controller
     private function generateComboId()
     {
         return "BZZB-". Str::random(8);
+
     }
 
 
